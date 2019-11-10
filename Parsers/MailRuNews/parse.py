@@ -13,8 +13,8 @@ def parse(lxml):
 	website = BeautifulSoup(request.text, 'html.parser')
 	page = website.findAll('div', 'newsitem')
 	for n in range(len(page)):
-        if(page[n].find('div', 'newsitem_itsinterest') != None):
-            continue
+		if(page[n].find('div', 'newsitem_itsinterest') != None):
+			continue
 		news = News()
 		news.title = page[n].find('span', 'newsitem__title-inner').text
 		news.article = page[n].find('span', 'newsitem__text').text
