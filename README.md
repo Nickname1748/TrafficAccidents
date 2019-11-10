@@ -7,3 +7,7 @@ We collect news from following sources:
 * [Google Alerts](https://www.google.com/alerts)
 * [SMI2](http://smi2.ru/)
 * [Mail.Ru News](https://news.mail.ru)
+
+## Dependencies
+We use following libraries:
+* BeautifulSoup (Python)
