@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 
 all_news = []
+KEY_WORDS = ['ДТП', 'сбили пешехода']
 
 class News():
 	title = ""
@@ -21,5 +22,6 @@ def parse(lxml):
 		news.link = page[n].find('a', 'newsitem__title link-holder')['href']
 		all_news.append(news)		
 
-parse('https://news.mail.ru/search/?usid=90&q=%D0%BF%D0%B5%D1%88%D0%B5%D1%85%D0%BE%D0%B4')
+for i in range(len(KEY_WORDS)):
+	parse('https://news.mail.ru/search/?usid=90&q={}'.format(KEY_WORDS[i]))
 print(all_news)
