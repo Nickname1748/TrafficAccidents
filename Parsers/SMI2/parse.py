@@ -1,7 +1,9 @@
 import urllib.request
 import json
+import httplib2
 
 all_news = []
+KEY_WORDS = ['ДТП', 'сбили%20пешехода']
 
 class News():
 	title = ""
@@ -19,4 +21,6 @@ def parse(url):
         news.link = art["share_url"]
         all_news.append(news)
 
-parse('https://smi2.ru/api/search?limit=30&offset=0&order=date&query=%D0%BF%D0%B5%D1%88%D0%B5%D1%85%D0%BE%D0%B4')
+for word in KEY_WORDS:
+    parse(httplib2.iri2uri('https://smi2.ru/api/search?limit=100&offset=0&order=date&query={}'.format(word)))
+    
