@@ -22,5 +22,5 @@ def parse(url):
 		news['link'] = 'https://news.mail.ru' + page[n].find('a', 'link-holder')['href']
 		all_news.append(news)		
 
-for i in range(len(KEY_WORDS)):
-	parse('https://news.mail.ru/search/?usid=90&q={}'.format(KEY_WORDS[i]))
+for word in KEY_WORDS:
+	parse('https://news.mail.ru/search/?usid=90&q={}'.format(word))
