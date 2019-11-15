@@ -9,5 +9,4 @@ We collect news from following sources:
 * [Mail.Ru News](https://news.mail.ru)
 
 ## Dependencies
-We use following libraries:
-* BeautifulSoup (Python)
+See an updated dependencies list [here](https://github.com/Nickname1748/TrafficAccidents/network/dependencies)
