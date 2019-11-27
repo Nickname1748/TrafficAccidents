@@ -17,7 +17,7 @@ def parse(lxml):
 		news['article'] = page[n].find('span').text
 		news['link'] = page[n].find('a', 'result_title_link')['href']
 		all_news.append(news)		
+	return all_news
 
 for word in KEY_WORDS:
-	parse('https://www.google.ru/alerts/preview?params=[null,[null,null,null,[null,"{}","ru",[null,"ru","RU"],null,null,null,0,1],null,3,[[null,1,"user@example.com",[null,null,10],2,"ru-RU",null,null,null,null,null,"0",null,null,"AB2Xq4hcilCERh73EFWJVHXx-io2lhh1EhC8UD8"]]],0]'.format(word))
-print(all_news)
+	print(len(parse('https://www.google.ru/alerts/preview?params=[null,[null,null,null,[null,"{}","ru",[null,"ru","RU"],null,null,null,0,1],null,3,[[null,1,"user@example.com",[null,null,10],2,"ru-RU",null,null,null,null,null,"0",null,null,"AB2Xq4hcilCERh73EFWJVHXx-io2lhh1EhC8UD8"]]],0]'.format(word))))
