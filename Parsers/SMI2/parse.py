@@ -18,6 +18,7 @@ def parse(url):
         news['article'] = art['announce_original']
         news['link'] = art['share_url']
         all_news.append(news)
+    return all_news
 
 for word in KEY_WORDS:
-    parse(httplib2.iri2uri('https://smi2.ru/api/search?limit=100&offset=0&order=date&query={}'.format(word)))
+    print(len(parse(httplib2.iri2uri('https://smi2.ru/api/search?limit=100&offset=0&order=date&query={}'.format(word)))))
