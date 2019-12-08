@@ -1,6 +1,6 @@
-import ParseGoogleAlerts
-import ParseSMI2
-import ParseMailRuNews
+from Parsers import ParseGoogleAlerts
+from Parsers import ParseSMI2
+from Parsers import ParseMailRuNews
 
 def main(KEY_WORDS:list):
     news = []

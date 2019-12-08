@@ -5,33 +5,78 @@ import time
 import locale
 import io
 
+locale.setlocale(locale.LC_ALL, '')
+
+def return_right_date_form():
+    a = time.strftime("%e %B %Y года", time.gmtime(time.time()))
+    a = a.split(' ')
+    month_num = int(time.strftime('%m', time.gmtime(time.time())))
+    if (month_num != 3) and (month_num != 8):
+        a[2] = a[2].replace('ь', 'я')
+    else:
+        a[2] = a[2] = a[2] + 'а'
+    a = " ".join(a)
+    return a
+
 def layout(all_news):
-    locale.setlocale(locale.LC_ALL, '')
     msg = MIMEMultipart()
-    msg['Subject'] = "Новости о ДТП за {}".format(time.strftime("%e %B %Y года", time.gmtime(time.time())))
-    # Not implemented yet
-    #msg['From'] = 
-    #msg['To'] = 
-    text = "За {} мы собрали следующие новости:".format(time.strftime("%e %B", time.gmtime(time.time())))
+    msg['Subject'] = "Новости о ДТП за {}".format(return_right_date_form())
+    msg['From'] = 'nickname.project@gmail.com'
+    msg['To'] = 'solovyov-sasha@mail.ru'
+    text = "За {} мы собрали следующие новости:".format(return_right_date_form())
     for news in all_news:
         text = text + '\n\n' + news['title'] + '\n' + news['link'] + '\n' + news['article']
     textpart = MIMEText(text, 'plain')
-    # TODO: HTML part
-    msg.attach(textpart)
+    htmlpart = MIMEText(make_html(all_news),'html')
+    msg.attach(htmlpart)
+    #msg.attach(textpart)
+    fromaddr = 'nickname.project@gmail.com'
+    toaddr = 'solovyov-sasha@mail.ru'
+    server = smtplib.SMTP_SSL('smtp.gmail.com',465)
+    server.ehlo()
+    server.login('nickname.project@gmail.com', 'RyheebtangEgCe3')
+    msg_full = msg.as_string()
+    server.sendmail(fromaddr, toaddr, msg_full)
+    server.quit()
     return msg
 
 def make_html(news):
-    template = '''<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
-    <h2 style="font-family: 'Roboto', sans-serif; margin-left: 25%;">За прошедший день было собрано {} новостей о ДТП:</h2>
-    {}
-</body>
-</html>'''
+    if len(news) % 10 == 1:
+        template = '''<!DOCTYPE html>
+    <html lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+    </head>
+    <body>
+        <h2 style="font-family: 'Roboto', sans-serif;">За прошедший день была собрана {} новость о ДТП:</h2>
+        {}
+    </body>
+    </html>'''
+    elif (len(news) % 10 == 2) or (len(news) % 10 == 3) or (len(news) % 10 == 4):
+        template = '''<!DOCTYPE html>
+    <html lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+    </head>
+    <body>
+        <h2 style="font-family: 'Roboto', sans-serif;">За прошедший день были собраны {} новости о ДТП:</h2>
+        {}
+    </body>
+    </html>'''
+    else:
+        template = '''<!DOCTYPE html>
+    <html lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+    </head>
+    <body>
+        <h2 style="font-family: 'Roboto', sans-serif;">За прошедший день было собрано {} новостей о ДТП:</h2>
+        {}
+    </body>
+    </html>'''
     other_template = '''
     <ul>
         <li>
