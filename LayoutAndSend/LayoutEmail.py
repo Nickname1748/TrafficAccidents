@@ -5,6 +5,8 @@ import time
 import locale
 import io
 
+PASSWORD = ''
+
 locale.setlocale(locale.LC_ALL, '')
 
 def return_right_date_form():
@@ -34,7 +36,7 @@ def layout(all_news):
     toaddr = 'solovyov-sasha@mail.ru'
     server = smtplib.SMTP_SSL('smtp.gmail.com',465)
     server.ehlo()
-    server.login('nickname.project@gmail.com', 'RyheebtangEgCe3')
+    server.login('nickname.project@gmail.com', PASSWORD)
     msg_full = msg.as_string()
     server.sendmail(fromaddr, toaddr, msg_full)
     server.quit()
