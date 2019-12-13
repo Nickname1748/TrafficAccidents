@@ -1,96 +1,62 @@
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-import smtplib
 import time
 import locale
 import io
 
-PASSWORD = ''
+# Tested to work on Linux. For other platforms not guaranteed to work.
+locale.setlocale(locale.LC_ALL, 'ru_RU.UTF-8')
 
-locale.setlocale(locale.LC_ALL, '')
-
-def return_right_date_form():
+def get_localized_time():
     a = time.strftime("%e %B %Y года", time.gmtime(time.time()))
-    a = a.split(' ')
-    month_num = int(time.strftime('%m', time.gmtime(time.time())))
-    if (month_num != 3) and (month_num != 8):
-        a[2] = a[2].replace('ь', 'я')
-    else:
-        a[2] = a[2] = a[2] + 'а'
-    a = " ".join(a)
     return a
+
+def format_news_count(n):
+    d = n % 10
+    if d == 1:
+        return "{} новость".format(n)
+    elif d < 5:
+        return "{} новости".format(n)
+    else:
+        return "{} новостей".format(n)
+
+def layout_text_part(all_news):
+    text = "За {} мы собрали {}:".format(get_localized_time(), format_news_count(len(all_news)))
+    for news in all_news:
+        text = text + '\n\n' + news['title'] + '\n' + news['link'] + '\n' + news['article']
+    return text
+
+def layout_html_part(all_news):
+    html = '''<!DOCTYPE html>
+    <html lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+    </head>
+    <body>
+        <h2 style="font-family: 'Roboto', sans-serif;">За прошедший день мы собрали {} о ДТП:</h2>
+        <ul>
+            {}
+        </ul>
+    </body>
+    </html>'''
+    news_item = '''
+            <li>
+                <h4 style="font-family: 'Roboto', sans-serif;">{}</h4>
+                <p style="font-family: 'Roboto', sans-serif;">{}</p>
+                <a style="font-family: 'Roboto', sans-serif;" href="{}">Источник</a>
+            </li>'''
+    all_items = []
+    for news in all_news:
+        all_items.append(news_item.format(news['title'], news['article'], news['link']))
+    html = html.format(format_news_count(len(all_news)), '\n'.join(all_items))
+    return html
 
 def layout(all_news):
     msg = MIMEMultipart()
-    msg['Subject'] = "Новости о ДТП за {}".format(return_right_date_form())
-    msg['From'] = 'nickname.project@gmail.com'
-    msg['To'] = 'solovyov-sasha@mail.ru'
-    text = "За {} мы собрали следующие новости:".format(return_right_date_form())
-    for news in all_news:
-        text = text + '\n\n' + news['title'] + '\n' + news['link'] + '\n' + news['article']
-    textpart = MIMEText(text, 'plain')
-    htmlpart = MIMEText(make_html(all_news),'html')
+    msg['Subject'] = "Новости о ДТП за {}".format(get_localized_time())
+    # textpart = MIMEText(layout_text_part(all_news), 'plain')
+    htmlpart = MIMEText(layout_html_part(all_news), 'html')
+    # msg.attach(textpart)
     msg.attach(htmlpart)
-    #msg.attach(textpart)
-    fromaddr = 'nickname.project@gmail.com'
-    toaddr = 'solovyov-sasha@mail.ru'
-    server = smtplib.SMTP_SSL('smtp.gmail.com',465)
-    server.ehlo()
-    server.login('nickname.project@gmail.com', PASSWORD)
-    msg_full = msg.as_string()
-    server.sendmail(fromaddr, toaddr, msg_full)
-    server.quit()
     return msg
-
-def make_html(news):
-    if len(news) % 10 == 1:
-        template = '''<!DOCTYPE html>
-    <html lang="ru">
-    <head>
-        <meta charset="UTF-8">
-        <title></title>
-    </head>
-    <body>
-        <h2 style="font-family: 'Roboto', sans-serif;">За прошедший день была собрана {} новость о ДТП:</h2>
-        {}
-    </body>
-    </html>'''
-    elif (len(news) % 10 == 2) or (len(news) % 10 == 3) or (len(news) % 10 == 4):
-        template = '''<!DOCTYPE html>
-    <html lang="ru">
-    <head>
-        <meta charset="UTF-8">
-        <title></title>
-    </head>
-    <body>
-        <h2 style="font-family: 'Roboto', sans-serif;">За прошедший день были собраны {} новости о ДТП:</h2>
-        {}
-    </body>
-    </html>'''
-    else:
-        template = '''<!DOCTYPE html>
-    <html lang="ru">
-    <head>
-        <meta charset="UTF-8">
-        <title></title>
-    </head>
-    <body>
-        <h2 style="font-family: 'Roboto', sans-serif;">За прошедший день было собрано {} новостей о ДТП:</h2>
-        {}
-    </body>
-    </html>'''
-    other_template = '''
-    <ul>
-        <li>
-            <h4 style="font-family: 'Roboto', sans-serif;">{}</h4>
-            <p style="font-family: 'Roboto', sans-serif;">{}</p>
-            <a style="font-family: 'Roboto', sans-serif;" href="{}">Источник</a>
-        </li>
-    </ul>'''
-    templates = []
-    for i in news:
-        templates.append(other_template.format(i['title'], i['article'], i['link']))
-    template = template.format(len(news),'\n'.join(templates))
-    #with io.open('example.html', 'w', encoding='utf-8') as f:
-    #    f.write(template)
-    return template
