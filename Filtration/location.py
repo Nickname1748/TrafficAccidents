@@ -2,10 +2,17 @@ from natasha import LocationExtractor
 import requests
 import json
 
+def ifCrimea(json_data):
+    flag = False
+    a = json_data['response']['GeoObjectCollection']['featureMember'][0]['GeoObject']['metaDataProperty']['GeocoderMetaData']['Address']['Components']
+    for i in a:
+        if i['name'] == 'Республика Крым':
+            flag = True
+    return flag
+
 def delete_abroad(news):
     format_news = []
     for i in range(len(news)):
-        print(i)
         if (news[i]['country_code'] == "") or (news[i]['country_code'] == "RU"):
             format_news.append(news[i])
     return format_news
@@ -14,13 +21,18 @@ def get_full_address_and_country_code(news):
     API_KEY = "" #Yandex GeoCoder API key required
     URL = "https://geocode-maps.yandex.ru/1.x?geocode={}&apikey={}&format=json"
     for i in range(len(news)):
+        flag = False
         if news[i]['place'] != '':
             a = requests.get(URL.format(news[i]['place'], API_KEY))
             json_data = json.loads(a.text)
             if len(json_data['response']['GeoObjectCollection']['featureMember']) != 0:
                 place = json_data['response']['GeoObjectCollection']['featureMember'][0]['GeoObject']['metaDataProperty']['GeocoderMetaData']['Address']['formatted']
                 try:
-                    country_code = json_data['response']['GeoObjectCollection']['featureMember'][0]['GeoObject']['metaDataProperty']['GeocoderMetaData']['Address']['country_code']
+                    if ifCrimea(json_data):
+                        country_code = 'UA'
+                        flag = True
+                    if not(flag):
+                        country_code = json_data['response']['GeoObjectCollection']['featureMember'][0]['GeoObject']['metaDataProperty']['GeocoderMetaData']['Address']['country_code']
                 except KeyError:
                     country_code = ""
                 news[i]['place'] = place
@@ -29,7 +41,6 @@ def get_full_address_and_country_code(news):
                 news[i].update({'country_code': ""})
         else:
             news[i].update({'country_code':''})
-    print(news[17])
     return news
 def add_place(news):
     extractor = LocationExtractor()
