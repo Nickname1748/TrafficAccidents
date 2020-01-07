@@ -17,13 +17,13 @@ def delete_abroad(news):
             format_news.append(news[i])
     return format_news
 
-def get_full_address_and_country_code(news):
+def get_full_address_and_country_code(all_news):
     API_KEY = "" #Yandex GeoCoder API key required
     URL = "https://geocode-maps.yandex.ru/1.x?geocode={}&apikey={}&format=json"
-    for i in range(len(news)):
+    for i in range(len(all_news)):
         flag = False
-        if news[i]['place'] != '':
-            a = requests.get(URL.format(news[i]['place'], API_KEY))
+        if all_news[i]['place'] != '':
+            a = requests.get(URL.format(all_news[i]['place'], API_KEY))
             json_data = json.loads(a.text)
             if len(json_data['response']['GeoObjectCollection']['featureMember']) != 0:
                 place = json_data['response']['GeoObjectCollection']['featureMember'][0]['GeoObject']['metaDataProperty']['GeocoderMetaData']['Address']['formatted']
@@ -35,36 +35,28 @@ def get_full_address_and_country_code(news):
                         country_code = json_data['response']['GeoObjectCollection']['featureMember'][0]['GeoObject']['metaDataProperty']['GeocoderMetaData']['Address']['country_code']
                 except KeyError:
                     country_code = ""
-                news[i]['place'] = place
-                news[i].update({'country_code':country_code})
+                all_news[i]['place'] = place
+                all_news[i].update({'country_code':country_code})
             else:
-                news[i].update({'country_code': ""})
+                all_news[i].update({'country_code': ""})
         else:
-            news[i].update({'country_code':''})
-    return news
-def add_place(news):
+            all_news[i].update({'country_code':''})
+    return all_news
+
+def add_place(all_news):
     extractor = LocationExtractor()
-    for i in range(len(news)):
-        matches = extractor(news[i]['article'])
-        if len(matches.as_json) == 0:
-            matches = extractor(news[i]['title'])
-            if (len(matches.as_json) == 0):
-                news[i].update({'place':''})
-            else:
-                places = []
-                for k in range(len(matches.as_json)):
-                    places.append(matches.as_json[k]['fact']['name'])
-                for j in range(len(places)):
-                    places[j] = places[j].title()
-                news[i].update({'place':','.join(places)})
-        else:
+    for i in range(len(all_news)):
+        text = ' '.join([all_news[i]['title'], all_news[i]['article']])
+        matches = extractor(text)
+        all_news[i].update({'place':''})
+        if len(matches.as_json) > 0:
             places = []
-            for k in range(len(matches.as_json)):
-                places.append(matches.as_json[k]['fact']['name'])
+            for match in matches.as_json:
+                places.append(match['fact']['name'])
             for j in range(len(places)):
                 places[j] = places[j].title()
-            news[i].update({'place':','.join(places)})
-    return news
+            all_news[i].update({'place':','.join(places)})
+    return all_news
 
 def location_filter(news):
     news = add_place(news)
