@@ -13,9 +13,9 @@ def get_localized_time():
 
 def format_news_count(n):
     d = n % 10
-    if d == 1:
+    if d == 1 and n % 100 != 11:
         return "{} новость".format(n)
-    elif d < 5:
+    elif d > 1 and d < 5 and n / 10 % 10 != 1:
         return "{} новости".format(n)
     else:
         return "{} новостей".format(n)
