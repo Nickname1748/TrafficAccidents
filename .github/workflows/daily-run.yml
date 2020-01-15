@@ -6,6 +6,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      API_KEY: ${{ secrets.API_KEY }}
+      EMAIL_CREDENTIALS: ${{ secrets.EMAIL_CREDENTIALS }}
+      SEND_LIST: ${{ secrets.SEND_LIST }}
     steps:
     - uses: actions/checkout@v1
     - name: Set up Python
@@ -14,5 +18,10 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+    - name: Put secrets on place
+      run: |
+        echo "$API_KEY" > geocoderapikey.txt
+        echo "$EMAIL_CREDENTIALS" > credentials.txt
+        echo "$SEND_LIST" > sendlist.txt
     - name: Run
       run: python main.py
