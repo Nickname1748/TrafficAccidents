@@ -43,12 +43,13 @@ def layout_html_part(all_news):
     news_item = '''
             <li>
                 <h4 style="font-family: 'Roboto', sans-serif;">{}</h4>
+                <i style="font-family: 'Roboto', sans-serif;">{}</i>
                 <p style="font-family: 'Roboto', sans-serif;">{}</p>
                 <a style="font-family: 'Roboto', sans-serif;" href="{}">Источник</a>
             </li>'''
     all_items = []
     for news in all_news:
-        all_items.append(news_item.format(news['title'], news['article'], news['link']))
+        all_items.append(news_item.format(news['title'], news['place'], news['article'], news['link']))
     html = html.format(format_news_count(len(all_news)), '\n'.join(all_items))
     return html
 
