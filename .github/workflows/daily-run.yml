@@ -1,7 +1,7 @@
 name: Run a daily run
 on:
   schedule:
-    - cron: '30 16 * * *'
+    - cron: '30 13 * * *'
 
 jobs:
   build:
