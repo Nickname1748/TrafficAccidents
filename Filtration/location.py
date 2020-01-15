@@ -18,7 +18,8 @@ def delete_abroad(news):
     return format_news
 
 def get_full_address_and_country_code(all_news):
-    API_KEY = "" #Yandex GeoCoder API key required
+    apikeyfile = open('geocoderapikey.txt')
+    API_KEY = apikeyfile.read().strip('\n')
     URL = "https://geocode-maps.yandex.ru/1.x?geocode={}&apikey={}&format=json"
     for i in range(len(all_news)):
         flag = False
