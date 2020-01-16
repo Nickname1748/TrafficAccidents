@@ -23,7 +23,7 @@ def format_news_count(n):
 def layout_text_part(all_news):
     text = "За {} мы собрали {}:".format(get_localized_time(), format_news_count(len(all_news)))
     for news in all_news:
-        text = text + '\n\n' + news['title'] + '\n' + news['link'] + '\n' + news['article']
+        text = text + '\n\n' + news['title'] + '\n' + news['place'] + '\n' + news['link'] + '\n' + news['article']
     return text
 
 def layout_html_part(all_news):
