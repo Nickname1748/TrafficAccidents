@@ -6,6 +6,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       API_KEY: ${{ secrets.API_KEY }}
+      EMAIL_CREDENTIALS: ${{ secrets.EMAIL_CREDENTIALS }}
+      SEND_LIST_TEST: ${{ secrets.SEND_LIST_TEST }}
     steps:
     - name: Set up locale
       run: |
@@ -21,5 +23,7 @@ jobs:
     - name: Put secrets on place
       run: |
         echo "$API_KEY" > geocoderapikey.txt
+        echo "$EMAIL_CREDENTIALS" > credentials.txt
+        echo "$SEND_LIST_TEST" > sendlist.txt
     - name: Run
-      run: python main.py --nosend
+      run: python main.py
