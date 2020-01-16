@@ -16,8 +16,8 @@ jobs:
         pip install -r requirements.txt
     - name: Set up locale
       run: |
-        locale-gen ru_RU.UTF-8
-        dpkg-reconfigure locales
+        sudo locale-gen ru_RU.UTF-8
+        sudo dpkg-reconfigure locales
     - name: Put secrets on place
       run: |
         echo "$API_KEY" > geocoderapikey.txt
