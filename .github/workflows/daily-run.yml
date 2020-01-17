@@ -11,6 +11,10 @@ jobs:
       EMAIL_CREDENTIALS: ${{ secrets.EMAIL_CREDENTIALS }}
       SEND_LIST: ${{ secrets.SEND_LIST }}
     steps:
+    - name: Set up locale
+      run: |
+        sudo locale-gen ru_RU.UTF-8
+        sudo update-locale
     - uses: actions/checkout@v1
     - name: Set up Python
       uses: actions/setup-python@v1
