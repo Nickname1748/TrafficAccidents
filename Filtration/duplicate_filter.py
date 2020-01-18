@@ -1,9 +1,9 @@
-import nltk
+import nltk # Natural Language Toolkit
 nltk.download('stopwords')
-from pymorphy2 import MorphAnalyzer
+from pymorphy2 import MorphAnalyzer # Morphological analyzer for Russian language
 from nltk.corpus import stopwords
 import re
-from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer # Machine learning
 from sklearn.metrics.pairwise import cosine_distances
 
 def lemmatization(list_of_strings):
@@ -31,25 +31,39 @@ def compare_cosine_distances(vectors):
     return result
 
 def find_similar(distances):
-    f = []
-    pares = []
-    result = []
-    for i in distances:
-        f.append(list(i))
+    sets = []
+    setid = [-1]*len(distances) # Every item is not a member of any set
     for i in range(len(distances)):
         for k in range(len(distances[i])):
             if k != i:
                 if distances[i][k] < 0.6: #THIS NUMBER SHOULD BE TESTED
-                    pares.append(frozenset([i,k]))
-    for i in range(len(pares)):
-        if pares[i] not in result:
-            result.append(pares[i])
-    return result
+                    if setid[i] != -1:
+                        if setid[k] == -1:
+                            sets[setid[i]].add(k)
+                            setid[k] = setid[i]
+                    elif setid[k] != -1:
+                        if setid[i] == -1:
+                            sets[setid[k]].add(i)
+                            setid[i] = setid[k]
+                    else:
+                        setid[i] = len(sets)
+                        setid[k] = len(sets)
+                        sets.append(set([i,k]))
+    sets.sort(key=lambda s: len(s))
+    return sets
 
 def main_filter(news):
     list_of_strings = get_list_of_strings(news)
-    list_of_strings = clear_corpus(list_of_strings)
+    list_of_strings = clear_corpus(list_of_strings) # Remove unneeded words
+    list_of_strings = lemmatization(list_of_strings)
     vectors = get_vector(list_of_strings)
     distances = compare_cosine_distances(vectors)
-    result = find_similar(distances)
-    return result
+    sets = find_similar(distances)
+    finalnews = [] # Put all news to groups
+    for s in sets:
+        newsgroup = []
+        for i in s:
+            newsgroup.append(news.pop(i))
+        finalnews.append(newsgroup)
+    finalnews.extend(news) # Add remained news without groups
+    return finalnews
