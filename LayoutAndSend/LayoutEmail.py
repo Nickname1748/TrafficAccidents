@@ -27,30 +27,22 @@ def layout_text_part(all_news):
     return text
 
 def layout_html_part(all_news):
-    html = '''<!DOCTYPE html>
-    <html lang="ru">
-    <head>
-        <meta charset="UTF-8">
-        <title></title>
-    </head>
-    <body>
-        <h2 style="font-family: 'Roboto', sans-serif;">За прошедший день мы собрали {} о ДТП:</h2>
-        <ul>
-            {}
-        </ul>
-    </body>
-    </html>'''
-    news_item = '''
-            <li>
-                <h4 style="font-family: 'Roboto', sans-serif;">{}</h4>
-                <i style="font-family: 'Roboto', sans-serif;">{}</i>
-                <p style="font-family: 'Roboto', sans-serif;">{}</p>
-                <a style="font-family: 'Roboto', sans-serif;" href="{}">Источник</a>
-            </li>'''
-    all_items = []
+    template = open('html/emailtemplate.html', 'r').read()
+    newsgrouptemplate = open('html/emailnewsgrouptemplate.html', 'r').read()
+    newsgroupitemtemplate = open('html/emailnewsgroupitemtemplate.html', 'r').read()
+    newsitemtemplate = open('html/emailnewsitemtemplate.html', 'r').read()
+    groups = []
+    newsitems = []
     for news in all_news:
-        all_items.append(news_item.format(news['title'], news['place'], news['article'], news['link']))
-    html = html.format(format_news_count(len(all_news)), '\n'.join(all_items))
+        if type(news) == list:
+            groupitems = []
+            for item in news:
+                groupitems.append(newsgroupitemtemplate.format(item['title'], item['link'], item['article']))
+            groups.append(newsgrouptemplate.format(news[0]['place'], news[0]['title'], '\n'.join(groupitems)))
+        else:
+            newsitems.append(newsitemtemplate.format(news['place'], news['title'], news['link'], news['article']))
+    groups.extend(newsitems)
+    html = template.format(get_localized_time(), format_news_count(len(all_news)), '\n'.join(groups))
     return html
 
 def layout(all_news):

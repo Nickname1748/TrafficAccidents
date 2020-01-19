@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <title>Новости за {}</title>
+        <link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700&display=swap&subset=cyrillic" rel="stylesheet">
+        <style type="text/css">
+            body {{
+                /* padding: 2em; */
+                font-family: 'Roboto', sans-serif;
+            }}
+            h1 {{
+                margin: 1em;
+            }}
+            .newsgroup {{
+                margin: 0.5em;
+                padding: 1.5em;
+                background-color: deepskyblue;
+                color: azure;
+                border-radius: 1.5em;
+            }}
+            .newsgroupitem {{
+                margin: 0.5em;
+                padding: 1em;
+                background-color: dodgerblue;
+                border-radius: 1em;
+            }}
+            .newsitem {{
+                margin: 0.5em;
+                padding: 1.5em;
+                background-color: deepskyblue;
+                color: azure;
+                border-radius: 1.5em;
+            }}
+            .newsgroup a, .newsitem a {{
+                padding: 0.5em;
+                background-color: azure;
+                color: dodgerblue;
+                text-decoration: none;
+                border-radius: 0.5em;
+            }}
+            .newsgroup a:hover {{
+                background-color: deepskyblue;
+                color: azure;
+            }}
+            .newsitem a:hover {{
+                background-color: dodgerblue;
+                color: azure;
+            }}
+            footer {{
+                margin: 0.5em;
+                padding: 2em;
+                background-color: dodgerblue;
+                color: azure;
+                border-radius: 1.5em;
+            }}
+            footer a {{
+                color: azure;
+            }}
+        </style>
+    </head>
+    <body>
+        <h1>За прошедший день мы собрали {}</h1>
+        {}
+        <footer>
+            <address>
+                Отправлено <a href="mailto:nickname.project@gmail.com">//nickname</a>
+            </address>
+        </footer>
+    </body>
+</html>
