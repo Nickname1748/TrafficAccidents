@@ -12,8 +12,11 @@
             h1 {
                 margin: 1em;
             }
+            a {
+                color: azure;
+            }
             .newsgroup {
-                margin: 0.5em;
+                margin: 1em;
                 padding: 1.5em;
                 background-color: deepskyblue;
                 color: azure !important;
@@ -26,24 +29,24 @@
                 border-radius: 1em;
             }
             .newsitem {
-                margin: 0.5em;
+                margin: 1em;
                 padding: 1.5em;
                 background-color: deepskyblue;
                 color: azure !important;
                 border-radius: 1.5em;
             }
-            .newsgroup a, .newsitem a {
+            .newsgroup a.source, .newsitem a.source {
                 padding: 0.5em;
                 background-color: azure;
                 color: dodgerblue;
                 text-decoration: none;
                 border-radius: 0.5em;
             }
-            .newsgroup a:hover {
+            .newsgroup a.source:hover {
                 background-color: deepskyblue;
                 color: azure !important;
             }
-            .newsitem a:hover {
+            .newsitem a.source:hover {
                 background-color: dodgerblue;
                 color: azure !important;
             }
@@ -66,7 +69,7 @@
             <h2>Что-то произошло</h2>
             <div class="newsgroupitem">
                 <h3>Что-то произошло где-то?</h3>
-                <a href="https://notfakenews.ru/article/404">Источник</a>
+                <a class="source" href="https://notfakenews.ru/article/404">Источник</a>
                 <blockquote>
                     Многие говорят, что что-то необычное произошло. Правда ли это,
                     не знает никто. Но точно можно сказать, что это загадка...
@@ -74,7 +77,7 @@
             </div>
             <div class="newsgroupitem">
                 <h3>Эксперты утверждают, что что-то где-то случилось</h3>
-                <a href="https://evenmorenotfakenews.ru/article/404">Источник</a>
+                <a class="source" href="https://evenmorenotfakenews.ru/article/404">Источник</a>
                 <blockquote>
                     Загадочное что-то произошло где-то. Мы узнали экспертное мнение
                     по этому вопросу.
@@ -86,7 +89,7 @@
             <h2>Что-то произошло x2</h2>
             <div class="newsgroupitem">
                 <h3>Что-то снова произошло где-то?</h3>
-                <a href="https://notfakenews.ru/article/403">Источник</a>
+                <a class="source" href="https://notfakenews.ru/article/403">Источник</a>
                 <blockquote>
                     Многие говорят, что что-то необычное произошло снова. Правда ли это,
                     не знает никто. Но точно можно сказать, что это загадка...
@@ -94,7 +97,7 @@
             </div>
             <div class="newsgroupitem">
                 <h3>Эксперты утверждают, что что-то где-то снова случилось</h3>
-                <a href="https://evenmorenotfakenews.ru/article/403">Источник</a>
+                <a class="source" href="https://evenmorenotfakenews.ru/article/403">Источник</a>
                 <blockquote>
                     Загадочное что-то снова произошло где-то. Мы ещё раз узнали экспертное
                     мнение по этому вопросу.
@@ -104,7 +107,7 @@
         <div class="newsitem">
             <i>Россия, Москва</i>
             <h2>Где чайник?</h2>
-            <a href="https://notfakenews.ru/article/418">Источник</a>
+            <a class="source" href="https://notfakenews.ru/article/418">Источник</a>
             <blockquote>
                 Я не чайник, чтоб вы знали! Не пытайтесь использовать для нагревания воды!
             </blockquote>
@@ -112,7 +115,7 @@
         <div class="newsitem">
             <i>Россия, Москва</i>
             <h2>Что-то жарко</h2>
-            <a href="https://evenmorenotfakenews.ru/article/451">Источник</a>
+            <a class="source" href="https://evenmorenotfakenews.ru/article/451">Источник</a>
             <blockquote>
                 Хм... Термометр показывает 451&deg;F... Где-то я это уже видел...
             </blockquote>

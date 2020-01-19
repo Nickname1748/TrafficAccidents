@@ -23,7 +23,7 @@ def lemmatization(list_of_strings):
         list_of_strings[i] = morph.parse(list_of_strings[i])[0].normal_form
     return list_of_strings
 
-get_list_of_strings = lambda all_news: [news['article'] for news in all_news]
+get_list_of_strings = lambda all_news: [news['title']+news['article'] for news in all_news]
 
 def clear_corpus(list_of_strings):
     StopWords = stopwords.words('russian')
@@ -47,7 +47,7 @@ def find_similar(distances):
         for k in range(i+1, len(distances[i])):
             distsformed.append([distances[i][k], i, k])
     distsformed.sort(key=lambda d: d[0])
-    distsformed = filter(lambda d: d[0] < 0.6, distsformed) #THIS NUMBER SHOULD BE TESTED
+    distsformed = list(filter(lambda d: d[0] < 0.6, distsformed)) #THIS NUMBER SHOULD BE TESTED
     sets = []
     setid = [-1]*len(distances) # Every item is not a member of any set
     for dist in distsformed:
