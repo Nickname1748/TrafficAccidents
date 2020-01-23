@@ -20,16 +20,21 @@ def remove_same(news):
 def lemmatization(list_of_strings):
     morph = MorphAnalyzer()
     for i in range(len(list_of_strings)):
-        list_of_strings[i] = morph.parse(list_of_strings[i])[0].normal_form
+        words = list_of_strings[i].split()
+        for k in range(len(words)):
+            words[k] = morph.parse(words[k])[0].normal_form
+        list_of_strings[i] = ' '.join(words)
     return list_of_strings
 
-get_list_of_strings = lambda all_news: [news['title']+news['article'] for news in all_news]
+get_list_of_strings = lambda all_news: [news['title']+' '+news['article'] for news in all_news]
 
 def clear_corpus(list_of_strings):
     StopWords = stopwords.words('russian')
     for i in range(len(list_of_strings)):
-        for k in range(len(StopWords)):
-            list_of_strings[i] = re.sub(StopWords[k], "", list_of_strings[i])
+        list_of_strings[i] = re.sub(r'[^\w\s]', '', list_of_strings[i], re.UNICODE)
+        words = list_of_strings[i].split()
+        words = list(filter(lambda word: word.lower() not in StopWords, words))
+        list_of_strings[i] = ' '.join(words)
     return list_of_strings
 
 def get_vector(list_of_strings):
@@ -68,6 +73,26 @@ def find_similar(distances):
     sets.sort(key=lambda s: len(s), reverse=True)
     return sets
 
+def is_relevant(newstopic):
+    IRRELEVANT_WORDS = ['трасса'] # All in normal form
+    morph = MorphAnalyzer()
+    words = set()
+    if type(newstopic) == list:
+        for item in newstopic:
+            itemwords = (item['title']+' '+item['article']).split()
+            for i in range(len(itemwords)):
+                itemwords[i] = morph.parse(itemwords[i])[0].normal_form
+            words = words.union(set(itemwords))
+    else:
+        itemwords = (newstopic['title']+' '+newstopic['article']).split()
+        for i in range(len(itemwords)):
+            itemwords[i] = morph.parse(itemwords[i])[0].normal_form
+        words = set(itemwords)
+    for word in IRRELEVANT_WORDS:
+        if word in words:
+            return False
+    return True
+
 def main_filter(news):
     news = remove_same(news) # Remove exact same news
     list_of_strings = get_list_of_strings(news)
@@ -87,4 +112,5 @@ def main_filter(news):
     for i in range(len(news)):
         if i not in grouped:
             finalnews.append(news[i]) # Add remained news without groups
+    finalnews = list(filter(is_relevant, finalnews))
     return finalnews
