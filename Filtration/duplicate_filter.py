@@ -74,7 +74,9 @@ def find_similar(distances):
     return sets
 
 def is_relevant(newstopic):
-    IRRELEVANT_WORDS = ['трасса'] # All in normal form
+    # IRRELEVANT_WORDS = ['трасса'] # All in normal form
+    irrelevantwordsfile = open('irrelevantwords.txt', 'r')
+    IRRELEVANT_WORDS = [line.rstrip('\n') for line in irrelevantwordsfile]
     morph = MorphAnalyzer()
     words = set()
     if type(newstopic) == list:
