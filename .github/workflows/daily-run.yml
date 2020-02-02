@@ -10,7 +10,6 @@ jobs:
       API_KEY: ${{ secrets.API_KEY }}
       EMAIL_CREDENTIALS: ${{ secrets.EMAIL_CREDENTIALS }}
       SEND_LIST: ${{ secrets.SEND_LIST }}
-      KEY_WORDS: ${{ secrets.KEY_WORDS }}
     steps:
     - name: Set up locale
       run: |
@@ -28,6 +27,5 @@ jobs:
         echo "$API_KEY" > geocoderapikey.txt
         echo "$EMAIL_CREDENTIALS" > credentials.txt
         echo "$SEND_LIST" > sendlist.txt
-        echo "$KEY_WORDS" > keywords.txt
     - name: Run
       run: python main.py
