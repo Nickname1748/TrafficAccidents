@@ -11,7 +11,9 @@ import LayoutAndSend.SendEmail as send
 
 args = sys.argv
 
-KEY_WORDS = ['дтп', 'пешеход', 'сбили%20пешехода']
+keywordsfile = open('keywords.txt', 'r')
+KEY_WORDS = [line.rstrip('\n') for line in keywordsfile]
+# KEY_WORDS = ['дтп', 'пешеход', 'сбили%20пешехода']
 
 all_news = parse.main(KEY_WORDS)
 all_news = location.location_filter(all_news)
