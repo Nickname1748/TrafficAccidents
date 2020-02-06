@@ -15,7 +15,7 @@ def putindb(all_news):
 	for news in all_news:
 		if type(news) == list:
 			for item in news:
-				vals = (date, item['title'], item['article'], item['link'], item['place'])
+				vals = (date, item['title'][:250], item['article'][:250], item['link'], item['place'])
 				cursor.execute(sql, vals)
 		else:
 			vals = (date, news['title'], news['article'], news['link'], news['place'])
