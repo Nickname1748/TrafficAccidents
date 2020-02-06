@@ -34,38 +34,57 @@
                 }
             });
         </script>
-        <?php
-        function test_input($data) {
-            $data = trim($data);
-            $data = stripslashes($data);
-            $data = htmlspecialchars($data);
-            return $data;
-        }
-
-        $servername = "localhost";
-        $username = "webuser";
-        $password = "P@ssw0rd"; # Test password
-        $dbname = "TrafficAccidents";
-
-        $conn = new mysqli($servername, $username, $password, $dbname);
-        if($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
-        }
-
-        $sql = "SELECT * FROM News";
-        $result = $conn->query($sql);
-        if ($result->num_rows > 0) {
-            while($row = $result->fetch_assoc()) {
-                echo "id: " . $row["ID"]. " - Title: " . $row["Title"]. " " . $row["Article"]. "<br>";
+        <table>
+            <tr>
+                <th>Date</th>
+                <th>Location</th>
+                <th>Title</th>
+                <th>Article</th>
+                <th>Link</th>
+            </tr>
+            <?php
+            function test_input($data) {
+                $data = trim($data);
+                $data = stripslashes($data);
+                $data = htmlspecialchars($data);
+                return $data;
             }
-        } else {
-            echo "0 results";
-        }
-        $conn->close();
-        /*if ($_SERVER["REQUEST_METHOD"] == "GET") {
-            $daterange = test_input($_GET["daterange"]);
-            $search = test_input($_GET["search"]);
-        }*/
-        ?>
+
+            $servername = "localhost";
+            $username = "webuser";
+            $password = "P@ssw0rd"; # Test password
+            $dbname = "TrafficAccidents";
+
+            $conn = new mysqli($servername, $username, $password, $dbname);
+            $conn->set_charset('utf8');
+            if($conn->connect_error) {
+                die("Connection failed: " . $conn->connect_error);
+            }
+
+            $sql = "SELECT * FROM News";
+            if ($_SERVER["REQUEST_METHOD"] == "GET") {
+                list($firstdate, $lastdate) = explode("-", test_input($_GET["daterange"]));
+                $firstdate = explode(".", $firstdate);
+                $firstdate = $firstdate[2] . "-" . $firstdate[1] . "-" . $firstdate[0];
+                $lastdate = explode(".", $lastdate);
+                $lastdate = $lastdate[2] . "-" . $lastdate[1] . "-" . $lastdate[0];
+                echo $firstdate . " " . $lastdate;
+                $search = test_input($_GET["search"]);
+                if ($search == "") {
+                    $sql = "SELECT * FROM News WHERE Date BETWEEN '$firstdate' AND '$lastdate'";
+                }
+                else {
+                    $sql = "SELECT * FROM News WHERE (Date BETWEEN '$firstdate' AND '$lastdate') AND (Title LIKE '%$search%' OR Article LIKE '%$search%')";
+                }
+            }
+            $result = $conn->query($sql);
+            if ($result->num_rows > 0) {
+                while($row = $result->fetch_assoc()) {
+                    echo "<tr><td>" . $row["Date"] . "</td><td>" . $row["Location"] . "</td><td>" . $row["Title"] . "</td><td>" . $row["Article"] . "</td><td><a href=\"" . $row["Link"] . "\">Link</a></td></tr>";
+                }
+            }
+            $conn->close();
+            ?>
+        </table>
     </body>
 </html>

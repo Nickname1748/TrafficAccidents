@@ -1,47 +1,26 @@
-import sqlite3
-from Parsers.Parse_all import main 
+import mysql.connector
+import datetime
 
-class DB:
-	#---------- sqlite3 ----------#
-	conn = ""
-	cursor = ""
-	#----------- parse -----------#
-	title = ""
-	article = ""
-	link = ""
-	#------------ END ------------#
+def putindb(all_news):
+	db = mysql.connector.connect(
+		host='localhost',
+		user='backuser',
+		passwd='P@ssw0rd', # Test password
+		database='TrafficAccidents'
+	)
+	cursor = db.cursor()
 
-	#-------- Создание БД --------#
-	def create_db():
-		conn = sqlite3.connect("traffic_accidents.db")
-		cursor = conn.cursor()
-
-		cursor.execute("""CREATE TABLE dtp (title text, article text, link text)""")
-		conn.commit()
-	#------------ END ------------#
-
-	#------- Заполнение БД -------#
-	@staticmethod
-	def fill_db(KEY_WORDS:list):
-		conn = sqlite3.connect("traffic_accidents.db")
-		cursor = conn.cursor()
-
-		a = main(KEY_WORDS)
-		
-		for i in a: 
-			cursor.execute("""INSERT INTO dtp VALUES (?,?,?)""", (i['title'], i['article'], i['link']))
-		
-		conn.commit()
-	#------------ END ------------#
-
-#--------- Новая БД: ---------#
-#DB.create_db()
-#------------ END ------------#
-
-#------ Ключевый слова -------#
-keys = ["ДТП", "сбили пешехода", "велоспипедист"]
-#------------ END ------------#
-
-#------- Заполнение БД -------#
-DB.fill_db(keys)
-#------------ END ------------#
+	sql = "INSERT INTO News (Date, Title, Article, Link, Location) VALUES (%s, %s, %s, %s, %s)"
+	date = datetime.date.today()
+	for news in all_news:
+		if type(news) == list:
+			for item in news:
+				vals = (date, item['title'], item['article'], item['link'], item['place'])
+				cursor.execute(sql, vals)
+		else:
+			vals = (date, news['title'], news['article'], news['link'], news['place'])
+			cursor.execute(sql, vals)
+	
+	db.commit()
+	cursor.close()
+	db.close()
