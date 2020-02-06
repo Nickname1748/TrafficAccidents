@@ -40,7 +40,7 @@ def layout_html_part(all_news):
                 groupitems.append(newsgroupitemtemplate.format(item['tone']['negative'], item['title'], item['link'], item['article']))
             groups.append(newsgrouptemplate.format(news[0]['place'], news[0]['title'], '\n'.join(groupitems)))
         else:
-            newsitems.append(newsitemtemplate.format(news['place'], item['tone']['negative'], news['title'], news['link'], news['article']))
+            newsitems.append(newsitemtemplate.format(news['place'], news['tone']['negative'], news['title'], news['link'], news['article']))
     groups.extend(newsitems)
     html = template.format(get_localized_time(), format_news_count(len(all_news)), '\n'.join(groups))
     return html
