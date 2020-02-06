@@ -11,7 +11,7 @@
     </head>
     <body>
         <h1>//Nickname</h1>
-        <form action="" method="GET">
+        <form name="search" action="" method="GET">
             <input type="text" name="daterange">
             <input type="text" name="search">
             <input type="submit">
@@ -33,6 +33,20 @@
                     "firstDay": 1
                 }
             });
+            var gets = (function() {
+                var a = window.location.search;
+                var b = new Object();
+                a = a.substring(1).split("&");
+                for (var i = 0; i < a.length; i++) {
+                    c = a[i].split("=");
+                    b[c[0]] = c[1];
+                }
+                return b;
+            })();
+            if (gets.length != 0) {
+                document.forms["search"]["daterange"].value = gets["daterange"];
+                document.forms["search"]["search"].value = decodeURI(gets["search"]);
+            }
         </script>
         <table>
             <tr>
@@ -74,7 +88,7 @@
                     $sql = "SELECT * FROM News WHERE Date BETWEEN '$firstdate' AND '$lastdate'";
                 }
                 else {
-                    $sql = "SELECT * FROM News WHERE (Date BETWEEN '$firstdate' AND '$lastdate') AND (Title LIKE '%$search%' OR Article LIKE '%$search%')";
+                    $sql = "SELECT * FROM News WHERE (Date BETWEEN '$firstdate' AND '$lastdate') AND (Location LIKE '%$search%' OR Title LIKE '%$search%' OR Article LIKE '%$search%')";
                 }
             }
             $result = $conn->query($sql);
