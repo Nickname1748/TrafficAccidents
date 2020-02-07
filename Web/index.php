@@ -8,97 +8,108 @@
         <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
         <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
         <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+        <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/carlito" type="text/css" />
     </head>
     <body>
-        <h1>//Nickname</h1>
-        <form name="search" action="" method="GET">
-            <input type="text" name="daterange">
-            <input type="text" name="search">
-            <input type="submit">
-        </form>
-        <script>
-            $('input[name="daterange"]').daterangepicker({
-                "locale": {
-                    "format": "DD.MM.YYYY",
-                    "separator": "-",
-                    "applyLabel": "Выбрать",
-                    "cancelLabel": "Отмена",
-                    "fromLabel": "От",
-                    "toLabel": "до",
-                    "daysOfWeek": ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
-                    "monthNames": [
-                        "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
-                        "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"
-                    ],
-                    "firstDay": 1
+        <header>
+            <h1>//nickname</h1>
+        </header>
+        <main>
+            <form name="search" action="" method="GET">
+                <input type="text" name="daterange">
+                <input type="text" name="search">
+                <input type="submit">
+            </form>
+            <script>
+                $('input[name="daterange"]').daterangepicker({
+                    "locale": {
+                        "format": "DD.MM.YYYY",
+                        "separator": "-",
+                        "applyLabel": "Выбрать",
+                        "cancelLabel": "Отмена",
+                        "fromLabel": "От",
+                        "toLabel": "до",
+                        "daysOfWeek": ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
+                        "monthNames": [
+                            "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
+                            "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"
+                        ],
+                        "firstDay": 1
+                    }
+                });
+                var gets = (function() {
+                    var a = window.location.search;
+                    var b = new Object();
+                    a = a.substring(1).split("&");
+                    for (var i = 0; i < a.length; i++) {
+                        c = a[i].split("=");
+                        b[c[0]] = c[1];
+                    }
+                    return b;
+                })();
+                if (gets.length != 0) {
+                    if (gets["daterange"]) {
+                        document.forms["search"]["daterange"].value = gets["daterange"];
+                    }
+                    if (gets["search"]) {
+                        document.forms["search"]["search"].value = decodeURI(gets["search"]);
+                    }
                 }
-            });
-            var gets = (function() {
-                var a = window.location.search;
-                var b = new Object();
-                a = a.substring(1).split("&");
-                for (var i = 0; i < a.length; i++) {
-                    c = a[i].split("=");
-                    b[c[0]] = c[1];
+            </script>
+            <table id="results">
+                <tr>
+                    <th>Дата</th>
+                    <th>Место</th>
+                    <th>Заголовок</th>
+                    <th>Статья</th>
+                    <th>Ссылка</th>
+                </tr>
+                <?php
+                function test_input($data) {
+                    $data = trim($data);
+                    $data = stripslashes($data);
+                    $data = htmlspecialchars($data);
+                    return $data;
                 }
-                return b;
-            })();
-            if (gets.length != 0) {
-                document.forms["search"]["daterange"].value = gets["daterange"];
-                document.forms["search"]["search"].value = decodeURI(gets["search"]);
-            }
-        </script>
-        <table>
-            <tr>
-                <th>Date</th>
-                <th>Location</th>
-                <th>Title</th>
-                <th>Article</th>
-                <th>Link</th>
-            </tr>
-            <?php
-            function test_input($data) {
-                $data = trim($data);
-                $data = stripslashes($data);
-                $data = htmlspecialchars($data);
-                return $data;
-            }
 
-            $servername = "localhost";
-            $username = "webuser";
-            $password = "P@ssw0rd"; # Test password
-            $dbname = "TrafficAccidents";
+                $servername = "localhost";
+                $username = "webuser";
+                $password = "P@ssw0rd"; # Test password
+                $dbname = "TrafficAccidents";
 
-            $conn = new mysqli($servername, $username, $password, $dbname);
-            $conn->set_charset('utf8');
-            if($conn->connect_error) {
-                die("Connection failed: " . $conn->connect_error);
-            }
+                $conn = new mysqli($servername, $username, $password, $dbname);
+                $conn->set_charset('utf8');
+                if($conn->connect_error) {
+                    die("Connection failed: " . $conn->connect_error);
+                }
 
-            $sql = "SELECT * FROM News";
-            if ($_SERVER["REQUEST_METHOD"] == "GET") {
-                list($firstdate, $lastdate) = explode("-", test_input($_GET["daterange"]));
-                $firstdate = explode(".", $firstdate);
-                $firstdate = $firstdate[2] . "-" . $firstdate[1] . "-" . $firstdate[0];
-                $lastdate = explode(".", $lastdate);
-                $lastdate = $lastdate[2] . "-" . $lastdate[1] . "-" . $lastdate[0];
-                echo $firstdate . " " . $lastdate;
-                $search = test_input($_GET["search"]);
-                if ($search == "") {
-                    $sql = "SELECT * FROM News WHERE Date BETWEEN '$firstdate' AND '$lastdate'";
+                $sql = "SELECT * FROM News";
+                if ($_SERVER["REQUEST_METHOD"] == "GET") {
+                    list($firstdate, $lastdate) = explode("-", test_input($_GET["daterange"]));
+                    $firstdate = explode(".", $firstdate);
+                    $firstdate = $firstdate[2] . "-" . $firstdate[1] . "-" . $firstdate[0];
+                    $lastdate = explode(".", $lastdate);
+                    $lastdate = $lastdate[2] . "-" . $lastdate[1] . "-" . $lastdate[0];
+                    $search = test_input($_GET["search"]);
+                    if ($search == "") {
+                        $sql = "SELECT * FROM News WHERE Date BETWEEN '$firstdate' AND '$lastdate'";
+                    }
+                    else {
+                        $sql = "SELECT * FROM News WHERE (Date BETWEEN '$firstdate' AND '$lastdate') AND (Location LIKE '%$search%' OR Title LIKE '%$search%' OR Article LIKE '%$search%')";
+                    }
                 }
-                else {
-                    $sql = "SELECT * FROM News WHERE (Date BETWEEN '$firstdate' AND '$lastdate') AND (Location LIKE '%$search%' OR Title LIKE '%$search%' OR Article LIKE '%$search%')";
+                $result = $conn->query($sql);
+                if ($result->num_rows > 0) {
+                    while($row = $result->fetch_assoc()) {
+                        echo "<tr><td>" . $row["Date"] . "</td><td>" . $row["Location"] . "</td><td>" . $row["Title"] . "</td><td>" . $row["Article"] . "</td><td><a href=\"" . $row["Link"] . "\">Ссылка</a></td></tr>";
+                    }
                 }
-            }
-            $result = $conn->query($sql);
-            if ($result->num_rows > 0) {
-                while($row = $result->fetch_assoc()) {
-                    echo "<tr><td>" . $row["Date"] . "</td><td>" . $row["Location"] . "</td><td>" . $row["Title"] . "</td><td>" . $row["Article"] . "</td><td><a href=\"" . $row["Link"] . "\">Link</a></td></tr>";
-                }
-            }
-            $conn->close();
-            ?>
-        </table>
+                $conn->close();
+                ?>
+            </table>
+        </main>
+        <footer>
+            <p>Создано <b class="brand">//nickname</b></p>
+        </footer>
     </body>
 </html>
