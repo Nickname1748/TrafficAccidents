@@ -59,8 +59,24 @@ def add_place(all_news):
             all_news[i].update({'place':','.join(places)})
     return all_news
 
+def location_order(news):
+    f = open('linux_cities.txt', 'r')
+    cities = [i for i in f]
+    for i in range(len(news)):
+        flag = False
+        for k in range(len(cities)):
+            if news[i]['place'].find(cities[k]) != -1:
+                flag = True
+                news[i].update({'order':k})
+                break 
+        if not(flag):
+            news[i].update({'order':202})
+    news.sort(key=lambda k: k['order'])
+    return news
+
 def location_filter(news):
     news = add_place(news)
     news = get_full_address_and_country_code(news)
     news = delete_abroad(news)
+    news = location_order(news)
     return news
