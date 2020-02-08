@@ -60,6 +60,9 @@ table#results th {
     background-color: deepskyblue;
     color: azure;
 }
+table#results th#newsgroup {
+    background-color: aqua;
+}
 table#results tr:nth-child(even) {
     background-color: gainsboro;
 }

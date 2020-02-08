@@ -60,6 +60,7 @@
                 <tr>
                     <th>Дата</th>
                     <th>Место</th>
+                    <th>Тональность</th>
                     <th>Заголовок</th>
                     <th>Статья</th>
                     <th>Ссылка</th>
@@ -83,7 +84,11 @@
                     die("Connection failed: " . $conn->connect_error);
                 }
 
-                $sql = "SELECT * FROM News";
+                date_default_timezone_set('Europe/Moscow');
+                $date = date('Y-m-d', time());
+                $sqlnews = "SELECT * FROM News WHERE Date = '$date'";
+                $sqlgroup = "SELECT * FROM Groups WHERE Date = '$date'";
+                $search = "";
                 if ($_SERVER["REQUEST_METHOD"] == "GET") {
                     list($firstdate, $lastdate) = explode("-", test_input($_GET["daterange"]));
                     $firstdate = explode(".", $firstdate);
@@ -91,19 +96,54 @@
                     $lastdate = explode(".", $lastdate);
                     $lastdate = $lastdate[2] . "-" . $lastdate[1] . "-" . $lastdate[0];
                     $search = test_input($_GET["search"]);
-                    if ($search == "") {
-                        $sql = "SELECT * FROM News WHERE Date BETWEEN '$firstdate' AND '$lastdate'";
+                    $sqlgroupslist = "SELECT DISTINCT GroupID FROM News WHERE Date BETWEEN '$firstdate' AND '$lastdate'";
+                    $sqlnews = "SELECT * FROM News WHERE Date BETWEEN '$firstdate' AND '$lastdate'";
+                    $sqlgroup = "SELECT * FROM Groups WHERE Date BETWEEN '$firstdate' AND '$lastdate'";
+                    // if ($search == "") {
+                    //     $sql = "SELECT * FROM News WHERE Date BETWEEN '$firstdate' AND '$lastdate'";
+                    // }
+                    // else {
+                    //     $sql = "SELECT * FROM News WHERE (Date BETWEEN '$firstdate' AND '$lastdate') AND (Location LIKE '%$search%' OR Title LIKE '%$search%' OR Article LIKE '%$search%')";
+                    // }
+                }
+                if($search == "") {
+                    $grouplist = $conn->query($sqlgroup);
+                    while($group = $grouplist->fetch_assoc()) {
+                        echo "<tr><th colspan=6 class=\"newsgroup\">" . $group["Title"] . "</th></tr>";
+                        $newslist = $conn->query($sqlnews . " AND GroupID = " . $group["ID"]);
+                        while($news = $newslist->fetch_assoc()) {
+                            echo "<tr><td>" . $row["Date"] . "</td><td>" . $row["Location"] . "</td><td>" . number_format($row["Tone"]*100, 2) . "%" . "</td><td>" . $row["Title"] . "</td><td>" . $row["Article"] . "</td><td><a href=\"" . $row["Link"] . "\">Ссылка</a></td></tr>";
+                        }
                     }
-                    else {
-                        $sql = "SELECT * FROM News WHERE (Date BETWEEN '$firstdate' AND '$lastdate') AND (Location LIKE '%$search%' OR Title LIKE '%$search%' OR Article LIKE '%$search%')";
+                    echo "<tr><th colspan=6 class=\"newsgroup\"></th></tr>";
+                    $newslist = $conn->query($sqlnews . " AND GroupID = -1");
+                    while($news = $newslist->fetch_assoc()) {
+                        echo "<tr><td>" . $row["Date"] . "</td><td>" . $row["Location"] . "</td><td>" . number_format($row["Tone"]*100, 2) . "%" . "</td><td>" . $row["Title"] . "</td><td>" . $row["Article"] . "</td><td><a href=\"" . $row["Link"] . "\">Ссылка</a></td></tr>";
                     }
                 }
-                $result = $conn->query($sql);
-                if ($result->num_rows > 0) {
-                    while($row = $result->fetch_assoc()) {
-                        echo "<tr><td>" . $row["Date"] . "</td><td>" . $row["Location"] . "</td><td>" . $row["Title"] . "</td><td>" . $row["Article"] . "</td><td><a href=\"" . $row["Link"] . "\">Ссылка</a></td></tr>";
+                else {
+                    $grouplist = $conn->query($sqlgroupslist . " AND (Location LIKE '%$search%' OR Title LIKE '%$search%' OR Article LIKE '%$search%') AND GroupID <> -1 ORDER BY GroupID");
+                    while($groupid = $grouplist->fetch_assoc()) {
+                        $groupq = $conn->query("SELECT * FROM Groups WHERE ID = " . $groupid["GroupID"]);
+                        while($group = $groupq->fetch_assoc()) {
+                            echo "<tr><th colspan=6 class=\"newsgroup\">" . $group["Title"] . "</th></tr>";
+                            $newslist = $conn->query($sqlnews . " AND GroupID = " . $group["ID"]);
+                            while($news = $newslist->fetch_assoc()) {
+                                echo "<tr><td>" . $row["Date"] . "</td><td>" . $row["Location"] . "</td><td>" . number_format($row["Tone"]*100, 2) . "%" . "</td><td>" . $row["Title"] . "</td><td>" . $row["Article"] . "</td><td><a href=\"" . $row["Link"] . "\">Ссылка</a></td></tr>";
+                            }
+                        }
+                    }
+                    $newslist = $conn->query($sqlnews . " AND (Location LIKE '%$search%' OR Title LIKE '%$search%' OR Article LIKE '%$search%') AND GroupID = -1");
+                    while($news = $newslist->fetch_assoc()) {
+                        echo "<tr><td>" . $row["Date"] . "</td><td>" . $row["Location"] . "</td><td>" . number_format($row["Tone"]*100, 2) . "%" . "</td><td>" . $row["Title"] . "</td><td>" . $row["Article"] . "</td><td><a href=\"" . $row["Link"] . "\">Ссылка</a></td></tr>";
                     }
                 }
+                // $result = $conn->query($sql);
+                // if ($result->num_rows > 0) {
+                //     while($row = $result->fetch_assoc()) {
+                //         echo "<tr><td>" . $row["Date"] . "</td><td>" . $row["Location"] . "</td><td>" . number_format($row["Tone"]*100, 2) . "%" . "</td><td>" . $row["Title"] . "</td><td>" . $row["Article"] . "</td><td><a href=\"" . $row["Link"] . "\">Ссылка</a></td></tr>";
+                //     }
+                // }
                 $conn->close();
                 ?>
             </table>

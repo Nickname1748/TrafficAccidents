@@ -10,16 +10,24 @@ def putindb(all_news):
 	)
 	cursor = db.cursor()
 
-	sql = "INSERT INTO News (Date, Title, Article, Link, Location, Tone) VALUES (%s, %s, %s, %s, %s, %s)"
 	date = datetime.date.today()
+	idgroup = int(date.strftime('%Y%m%d')+'01')
+	idnews = int(date.strftime('%Y%m%d')+'001')
+	sqlnews = 'INSERT INTO News (ID, Date, Title, Article, Link, Location, Tone, GroupID) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)'
+	sqlgroups = 'INSERT INTO Groups (ID, Date, Title) VALUES (%s, %s, %s)'
 	for news in all_news:
 		if type(news) == list:
+			valsgroup = (idgroup, date, news[0]['title'])
+			cursor.execute(sqlgroups, valsgroup)
 			for item in news:
-				vals = (date, item['title'], item['article'], item['link'], item['place'], item['tone']['negative'])
-				cursor.execute(sql, vals)
+				valsitem = (idnews, date, item['title'], item['article'], item['link'], item['place'], item['tone']['negative'], idgroup)
+				cursor.execute(sqlnews, valsitem)
+				idnews += 1
+			idgroup += 1
 		else:
-			vals = (date, news['title'], news['article'], news['link'], news['place'], news['tone']['negative'])
-			cursor.execute(sql, vals)
+			vals = (idnews, date, news['title'], news['article'], news['link'], news['place'], news['tone']['negative'], -1)
+			cursor.execute(sqlnews, vals)
+			idnews += 1
 	
 	db.commit()
 	cursor.close()
