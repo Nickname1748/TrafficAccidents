@@ -23,7 +23,7 @@ def format_news_count(n):
 def layout_text_part(all_news):
     text = "За {} мы собрали {}:".format(get_localized_time(), format_news_count(len(all_news)))
     for news in all_news:
-        text = text + '\n\n' + news['title'] + '\n' + news['place'] + '\n' + news['link'] + '\n' + news['article']
+        text = text + '\n\n' + news['tone']['negative'] + '\n' + news['title'] + '\n' + news['place'] + '\n' + news['link'] + '\n' + news['article']
     return text
 
 def layout_html_part(all_news):
@@ -37,10 +37,10 @@ def layout_html_part(all_news):
         if type(news) == list:
             groupitems = []
             for item in news:
-                groupitems.append(newsgroupitemtemplate.format(item['title'], item['link'], item['article']))
+                groupitems.append(newsgroupitemtemplate.format(item['tone']['negative'], item['title'], item['link'], item['article']))
             groups.append(newsgrouptemplate.format(news[0]['place'], news[0]['title'], '\n'.join(groupitems)))
         else:
-            newsitems.append(newsitemtemplate.format(news['place'], news['title'], news['link'], news['article']))
+            newsitems.append(newsitemtemplate.format(news['place'], news['tone']['negative'], news['title'], news['link'], news['article']))
     groups.extend(newsitems)
     html = template.format(get_localized_time(), format_news_count(len(all_news)), '\n'.join(groups))
     return html
