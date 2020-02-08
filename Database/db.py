@@ -10,15 +10,15 @@ def putindb(all_news):
 	)
 	cursor = db.cursor()
 
-	sql = "INSERT INTO News (Date, Title, Article, Link, Location) VALUES (%s, %s, %s, %s, %s)"
+	sql = "INSERT INTO News (Date, Title, Article, Link, Location) VALUES (%s, %s, %s, %s, %s, %s)"
 	date = datetime.date.today()
 	for news in all_news:
 		if type(news) == list:
 			for item in news:
-				vals = (date, item['title'][:250], item['article'][:250], item['link'], item['place'])
+				vals = (date, item['title'], item['article'], item['link'], item['place'], item['tone']['negative'])
 				cursor.execute(sql, vals)
 		else:
-			vals = (date, news['title'], news['article'], news['link'], news['place'])
+			vals = (date, news['title'], news['article'], news['link'], news['place'], news['tone']['negative'])
 			cursor.execute(sql, vals)
 	
 	db.commit()
