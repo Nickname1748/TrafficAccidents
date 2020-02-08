@@ -112,13 +112,13 @@
                         echo "<tr><th colspan=6 class=\"newsgroup\">" . $group["Title"] . "</th></tr>";
                         $newslist = $conn->query($sqlnews . " AND GroupID = " . $group["ID"]);
                         while($news = $newslist->fetch_assoc()) {
-                            echo "<tr><td>" . $row["Date"] . "</td><td>" . $row["Location"] . "</td><td>" . number_format($row["Tone"]*100, 2) . "%" . "</td><td>" . $row["Title"] . "</td><td>" . $row["Article"] . "</td><td><a href=\"" . $row["Link"] . "\">Ссылка</a></td></tr>";
+                            echo "<tr><td>" . $news["Date"] . "</td><td>" . $news["Location"] . "</td><td>" . number_format($news["Tone"]*100, 2) . "%" . "</td><td>" . $news["Title"] . "</td><td>" . $news["Article"] . "</td><td><a href=\"" . $news["Link"] . "\">Ссылка</a></td></tr>";
                         }
                     }
                     echo "<tr><th colspan=6 class=\"newsgroup\"></th></tr>";
                     $newslist = $conn->query($sqlnews . " AND GroupID = -1");
                     while($news = $newslist->fetch_assoc()) {
-                        echo "<tr><td>" . $row["Date"] . "</td><td>" . $row["Location"] . "</td><td>" . number_format($row["Tone"]*100, 2) . "%" . "</td><td>" . $row["Title"] . "</td><td>" . $row["Article"] . "</td><td><a href=\"" . $row["Link"] . "\">Ссылка</a></td></tr>";
+                        echo "<tr><td>" . $news["Date"] . "</td><td>" . $news["Location"] . "</td><td>" . number_format($news["Tone"]*100, 2) . "%" . "</td><td>" . $news["Title"] . "</td><td>" . $news["Article"] . "</td><td><a href=\"" . $news["Link"] . "\">Ссылка</a></td></tr>";
                     }
                 }
                 else {
@@ -129,13 +129,14 @@
                             echo "<tr><th colspan=6 class=\"newsgroup\">" . $group["Title"] . "</th></tr>";
                             $newslist = $conn->query($sqlnews . " AND GroupID = " . $group["ID"]);
                             while($news = $newslist->fetch_assoc()) {
-                                echo "<tr><td>" . $row["Date"] . "</td><td>" . $row["Location"] . "</td><td>" . number_format($row["Tone"]*100, 2) . "%" . "</td><td>" . $row["Title"] . "</td><td>" . $row["Article"] . "</td><td><a href=\"" . $row["Link"] . "\">Ссылка</a></td></tr>";
+                                echo "<tr><td>" . $news["Date"] . "</td><td>" . $news["Location"] . "</td><td>" . number_format($news["Tone"]*100, 2) . "%" . "</td><td>" . $news["Title"] . "</td><td>" . $news["Article"] . "</td><td><a href=\"" . $news["Link"] . "\">Ссылка</a></td></tr>";
                             }
                         }
                     }
+                    echo "<tr><th colspan=6 class=\"newsgroup\"></th></tr>";
                     $newslist = $conn->query($sqlnews . " AND (Location LIKE '%$search%' OR Title LIKE '%$search%' OR Article LIKE '%$search%') AND GroupID = -1");
                     while($news = $newslist->fetch_assoc()) {
-                        echo "<tr><td>" . $row["Date"] . "</td><td>" . $row["Location"] . "</td><td>" . number_format($row["Tone"]*100, 2) . "%" . "</td><td>" . $row["Title"] . "</td><td>" . $row["Article"] . "</td><td><a href=\"" . $row["Link"] . "\">Ссылка</a></td></tr>";
+                        echo "<tr><td>" . $news["Date"] . "</td><td>" . $news["Location"] . "</td><td>" . number_format($news["Tone"]*100, 2) . "%" . "</td><td>" . $news["Title"] . "</td><td>" . $news["Article"] . "</td><td><a href=\"" . $news["Link"] . "\">Ссылка</a></td></tr>";
                     }
                 }
                 // $result = $conn->query($sql);
