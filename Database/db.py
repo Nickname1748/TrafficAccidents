@@ -10,7 +10,7 @@ def putindb(all_news):
 	)
 	cursor = db.cursor()
 
-	sql = "INSERT INTO News (Date, Title, Article, Link, Location) VALUES (%s, %s, %s, %s, %s, %s)"
+	sql = "INSERT INTO News (Date, Title, Article, Link, Location, Tone) VALUES (%s, %s, %s, %s, %s, %s)"
 	date = datetime.date.today()
 	for news in all_news:
 		if type(news) == list:
