@@ -115,7 +115,7 @@
                             echo "<tr><td>" . $news["Date"] . "</td><td>" . $news["Location"] . "</td><td>" . number_format($news["Tone"]*100, 2) . "%" . "</td><td>" . $news["Title"] . "</td><td>" . $news["Article"] . "</td><td><a href=\"" . $news["Link"] . "\">Ссылка</a></td></tr>";
                         }
                     }
-                    echo "<tr><th colspan=6 class=\"newsgroup\"></th></tr>";
+                    echo "<tr><th colspan=6 class=\"newsgroup\">Не сгруппировано</th></tr>";
                     $newslist = $conn->query($sqlnews . " AND GroupID = -1");
                     while($news = $newslist->fetch_assoc()) {
                         echo "<tr><td>" . $news["Date"] . "</td><td>" . $news["Location"] . "</td><td>" . number_format($news["Tone"]*100, 2) . "%" . "</td><td>" . $news["Title"] . "</td><td>" . $news["Article"] . "</td><td><a href=\"" . $news["Link"] . "\">Ссылка</a></td></tr>";
@@ -133,7 +133,7 @@
                             }
                         }
                     }
-                    echo "<tr><th colspan=6 class=\"newsgroup\"></th></tr>";
+                    echo "<tr><th colspan=6 class=\"newsgroup\">Не сгруппировано</th></tr>";
                     $newslist = $conn->query($sqlnews . " AND (Location LIKE '%$search%' OR Title LIKE '%$search%' OR Article LIKE '%$search%') AND GroupID = -1");
                     while($news = $newslist->fetch_assoc()) {
                         echo "<tr><td>" . $news["Date"] . "</td><td>" . $news["Location"] . "</td><td>" . number_format($news["Tone"]*100, 2) . "%" . "</td><td>" . $news["Title"] . "</td><td>" . $news["Article"] . "</td><td><a href=\"" . $news["Link"] . "\">Ссылка</a></td></tr>";
