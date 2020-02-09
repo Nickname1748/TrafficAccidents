@@ -8,7 +8,7 @@ number = {
     'три' : '3',
     'трое' : '3',
     'четыре' : '4',
-    'четверо' : '3',
+    'четверо' : '4',
     'пять' : '5',
     'пятеро' : '5',
     'шесть' : '6',
@@ -42,16 +42,20 @@ def number_of_victims(post):
     die = 0
     injured = 0
 
-    for obj in check(post, TfidfVectorizer(), pymorphy2.MorphAnalyzer(), ['погибнуть', 'получить', 'жерта'], ['погиб', 'погибла']):
+    for obj in check(post, TfidfVectorizer(), pymorphy2.MorphAnalyzer(), ['погибнуть', 'получить', 'жертва'], ['погиб', 'погибла']):
         die += int(obj)
 
-    for obj in check(post, TfidfVectorizer(), pymorphy2.MorphAnalyzer(), ['пострадать', 'получить', 'жерта'], ['пострадал', 'пострадала']):
+    for obj in check(post, TfidfVectorizer(), pymorphy2.MorphAnalyzer(), ['пострадать', 'получить'], ['пострадал', 'пострадала']):
         injured += int(obj)
 
     print('Погибших: ' + str(die))
     print('Пострадавших: ' + str(injured))
-        
 
+    
+def clear(word):
+    return word.replace(',', '').replace('.', '')
+
+        
 def check(post, vectorizer, morph, key_words, unique_words):
     words = post.split(' ')
 
@@ -69,8 +73,8 @@ def check(post, vectorizer, morph, key_words, unique_words):
                         if '1' not in quantity:
                             return '1'
 
-                    if ((words.index(word) + n) > 0) or ((words.index(word) + n) < len(words)):
-                        ww = words[words.index(word) + n]
+                    if ((words.index(word) + n) > 0) and ((words.index(word) + n) < len(words)):
+                        ww = clear(words[words.index(word) + n])
                         if (morph.parse(ww)[0].tag.POS == 'NUMR') or ('NUMB' in morph.parse(ww)[0].tag):
                             if str(ww) not in quantity:
                                 if int_check(ww):
@@ -79,9 +83,3 @@ def check(post, vectorizer, morph, key_words, unique_words):
                                     quantity.append(number[morph.parse(ww)[0].normal_form])
 
     return quantity
-
-#number_of_victims('Более 10 туристов пострадали в ДТП в Австралии')
-#number_of_victims('Один человек погиб и 12 пострадали в ДТП в Кабардино-Балкарии')
-#number_of_victims('В результате столкновения легкового автомобиля с пассажирской «Газелью» в Кабардино-Балкарии один человек погиб и ещё 12 получили травмы различной степени тяжести.')
-#number_of_victims('Два человека погибли и еще двое пострадали в ДТП в Пермском крае')
-#number_of_victims('Один человек погиб и 12 пострадали в ДТП в Кабардино-Балкарии')
