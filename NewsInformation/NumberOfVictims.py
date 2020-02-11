@@ -1,5 +1,6 @@
 from sklearn.feature_extraction.text import TfidfVectorizer
 import pymorphy2
+import re
 
 number = {
     'один' : '1',
@@ -39,47 +40,58 @@ def int_check(str):
 
 
 def number_of_victims(post):
-    die = 0
+    dead = 0
     injured = 0
 
-    for obj in check(post, TfidfVectorizer(), pymorphy2.MorphAnalyzer(), ['погибнуть', 'получить', 'жертва'], ['погиб', 'погибла']):
-        die += int(obj)
+    dead = check(post, TfidfVectorizer(), pymorphy2.MorphAnalyzer(), ['погибнуть', 'жертва', 'погибший'], ['погиб', 'погибла'])
 
-    for obj in check(post, TfidfVectorizer(), pymorphy2.MorphAnalyzer(), ['пострадать', 'получить'], ['пострадал', 'пострадала']):
-        injured += int(obj)
+    injured = check(post, TfidfVectorizer(), pymorphy2.MorphAnalyzer(), ['пострадать', 'получить'], ['пострадал', 'пострадала'])
 
-    print('Погибших: ' + str(die))
-    print('Пострадавших: ' + str(injured))
+    return dead, injured
 
     
-def clear(word):
-    return word.replace(',', '').replace('.', '')
+# def clear(word):
+#     return word.replace(',', '').replace('.', '')
 
         
 def check(post, vectorizer, morph, key_words, unique_words):
+    post = re.sub(r'[^\w\s]', '', post, re.UNICODE)
     words = post.split(' ')
 
-    quantity = []
+    # quantity = []
 
-    for word in words:
+    for i, word in enumerate(words):
+        analyzedword = morph.parse(word)
+        normword = analyzedword[0].normal_form
         for key_word in key_words:
-            if morph.parse(word)[0].normal_form == key_word:
+            if normword == key_word:
                 for n in range(-2, 3):
-                    if (word == unique_words[0]) or (word == unique_words[0]):
-                        if '1' not in quantity:
-                            return '1'
+                    # if (word == unique_words[0]) or (word == unique_words[0]):
+                    #     if '1' not in quantity:
+                    #         return '1'
 
-                    if (morph.parse(key_word)[0].tag.gender == 'masc') or (morph.parse(key_word)[0].tag.gender == 'femn'):
-                        if '1' not in quantity:
-                            return '1'
+                    if analyzedword[0].tag.POS == 'VERB':
+                        if analyzedword[0].tag.number == 'sing':
+                            if analyzedword[0].tag.gender != 'neut':
+                                return 1
 
-                    if ((words.index(word) + n) > 0) and ((words.index(word) + n) < len(words)):
-                        ww = clear(words[words.index(word) + n])
+                    # if (morph.parse(key_word)[0].tag.gender == 'masc') or (morph.parse(key_word)[0].tag.gender == 'femn'):
+                    #     if '1' not in quantity:
+                    #         return '1'
+
+                    # if ((i + n) > 0) and ((i + n) < len(words)):
+                    if i + n in range(len(words)):
+                        ww = words[i + n]
                         if (morph.parse(ww)[0].tag.POS == 'NUMR') or ('NUMB' in morph.parse(ww)[0].tag):
-                            if str(ww) not in quantity:
-                                if int_check(ww):
-                                    quantity.append(morph.parse(ww)[0].normal_form)
-                                else:
-                                    quantity.append(number[morph.parse(ww)[0].normal_form])
+                            if int_check(ww):
+                                return int(morph.parse(ww)[0].normal_form)
+                            else:
+                                return int(number[morph.parse(ww)[0].normal_form])
+    return 0
 
-    return quantity
+def add_info(all_news):
+    for i, news in enumerate(all_news):
+        all_news[i]['dead'], all_news[i]['injured'] = number_of_victims(news['title']+' '+news['article'])
+    return all_news
+
+#print(number_of_victims('Причиной ДТП с двумя погибшими в Туве мог стать снегопад Авария произошла в Улуг-Хемском районе на трассе «Енисей». Там лоб в лоб столкнулись две легковые машины.'))
