@@ -24,9 +24,9 @@ def format_victims_count(dead, injured):
     deadtext = ''
     injtext = ''
     if dead > 0:
-        deadtext = 'Погибших: '+dead
+        deadtext = 'Погибших: '+str(dead)
     if injured > 0:
-        injtext = 'Пострадавших: '+injured
+        injtext = 'Пострадавших: '+str(injured)
     
     if deadtext != '' and injtext != '':
         return deadtext + ' ' + injtext
