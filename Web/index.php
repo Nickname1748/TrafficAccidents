@@ -60,6 +60,8 @@
                     <th>Дата</th>
                     <th>Место</th>
                     <th>Тональность</th>
+                    <th>Погибшие</th>
+                    <th>Пострадавшие</th>
                     <th>Заголовок</th>
                     <th>Статья</th>
                     <th>Ссылка</th>
@@ -108,16 +110,16 @@
                 if($search == "") {
                     $grouplist = $conn->query($sqlgroup);
                     while($group = $grouplist->fetch_assoc()) {
-                        echo "<tr><th colspan=6 class=\"newsgroup\">" . $group["Title"] . "</th></tr>";
+                        echo "<tr><th colspan=8 class=\"newsgroup\">" . $group["Title"] . "</th></tr>";
                         $newslist = $conn->query($sqlnews . " AND GroupID = " . $group["ID"]);
                         while($news = $newslist->fetch_assoc()) {
-                            echo "<tr><td>" . $news["Date"] . "</td><td>" . $news["Location"] . "</td><td>" . number_format($news["Tone"]*100, 2) . "%" . "</td><td>" . $news["Title"] . "</td><td>" . $news["Article"] . "</td><td><a href=\"" . $news["Link"] . "\">Ссылка</a></td></tr>";
+                            echo "<tr><td>" . $news["Date"] . "</td><td>" . $news["Location"] . "</td><td>" . number_format($news["Tone"]*100, 2) . "%" . "</td><td>" . $news["Killed"] . "</td><td>" . $news["Injured"] . "</td><td>" . $news["Title"] . "</td><td>" . $news["Article"] . "</td><td><a href=\"" . $news["Link"] . "\">Ссылка</a></td></tr>";
                         }
                     }
-                    echo "<tr><th colspan=6 class=\"newsgroup\">Не сгруппировано</th></tr>";
+                    echo "<tr><th colspan=8 class=\"newsgroup\">Не сгруппировано</th></tr>";
                     $newslist = $conn->query($sqlnews . " AND GroupID = -1");
                     while($news = $newslist->fetch_assoc()) {
-                        echo "<tr><td>" . $news["Date"] . "</td><td>" . $news["Location"] . "</td><td>" . number_format($news["Tone"]*100, 2) . "%" . "</td><td>" . $news["Title"] . "</td><td>" . $news["Article"] . "</td><td><a href=\"" . $news["Link"] . "\">Ссылка</a></td></tr>";
+                        echo "<tr><td>" . $news["Date"] . "</td><td>" . $news["Location"] . "</td><td>" . number_format($news["Tone"]*100, 2) . "%" . "</td><td>" . $news["Killed"] . "</td><td>" . $news["Injured"] . "</td><td>" . $news["Title"] . "</td><td>" . $news["Article"] . "</td><td><a href=\"" . $news["Link"] . "\">Ссылка</a></td></tr>";
                     }
                 }
                 else {
@@ -125,17 +127,17 @@
                     while($groupid = $grouplist->fetch_assoc()) {
                         $groupq = $conn->query("SELECT * FROM Groups WHERE ID = " . $groupid["GroupID"]);
                         while($group = $groupq->fetch_assoc()) {
-                            echo "<tr><th colspan=6 class=\"newsgroup\">" . $group["Title"] . "</th></tr>";
+                            echo "<tr><th colspan=8 class=\"newsgroup\">" . $group["Title"] . "</th></tr>";
                             $newslist = $conn->query($sqlnews . " AND GroupID = " . $group["ID"]);
                             while($news = $newslist->fetch_assoc()) {
-                                echo "<tr><td>" . $news["Date"] . "</td><td>" . $news["Location"] . "</td><td>" . number_format($news["Tone"]*100, 2) . "%" . "</td><td>" . $news["Title"] . "</td><td>" . $news["Article"] . "</td><td><a href=\"" . $news["Link"] . "\">Ссылка</a></td></tr>";
+                                echo "<tr><td>" . $news["Date"] . "</td><td>" . $news["Location"] . "</td><td>" . number_format($news["Tone"]*100, 2) . "%" . "</td><td>" . $news["Killed"] . "</td><td>" . $news["Injured"] . "</td><td>" . $news["Title"] . "</td><td>" . $news["Article"] . "</td><td><a href=\"" . $news["Link"] . "\">Ссылка</a></td></tr>";
                             }
                         }
                     }
-                    echo "<tr><th colspan=6 class=\"newsgroup\">Не сгруппировано</th></tr>";
+                    echo "<tr><th colspan=8 class=\"newsgroup\">Не сгруппировано</th></tr>";
                     $newslist = $conn->query($sqlnews . " AND (Location LIKE '%$search%' OR Title LIKE '%$search%' OR Article LIKE '%$search%') AND GroupID = -1");
                     while($news = $newslist->fetch_assoc()) {
-                        echo "<tr><td>" . $news["Date"] . "</td><td>" . $news["Location"] . "</td><td>" . number_format($news["Tone"]*100, 2) . "%" . "</td><td>" . $news["Title"] . "</td><td>" . $news["Article"] . "</td><td><a href=\"" . $news["Link"] . "\">Ссылка</a></td></tr>";
+                        echo "<tr><td>" . $news["Date"] . "</td><td>" . $news["Location"] . "</td><td>" . number_format($news["Tone"]*100, 2) . "%" . "</td><td>" . $news["Killed"] . "</td><td>" . $news["Injured"] . "</td><td>" . $news["Title"] . "</td><td>" . $news["Article"] . "</td><td><a href=\"" . $news["Link"] . "\">Ссылка</a></td></tr>";
                     }
                 }
                 // $result = $conn->query($sql);
