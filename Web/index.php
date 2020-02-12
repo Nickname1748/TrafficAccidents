@@ -90,7 +90,7 @@
                 $sqlnews = "SELECT * FROM News WHERE Date = '$date'";
                 $sqlgroup = "SELECT * FROM Groups WHERE Date = '$date'";
                 $search = "";
-                if ($_SERVER["REQUEST_METHOD"] == "GET") {
+                if ($_GET["daterange"] != "") {
                     list($firstdate, $lastdate) = explode("-", test_input($_GET["daterange"]));
                     $firstdate = explode(".", $firstdate);
                     $firstdate = $firstdate[2] . "-" . $firstdate[1] . "-" . $firstdate[0];
@@ -100,12 +100,6 @@
                     $sqlgroupslist = "SELECT DISTINCT GroupID FROM News WHERE Date BETWEEN '$firstdate' AND '$lastdate'";
                     $sqlnews = "SELECT * FROM News WHERE Date BETWEEN '$firstdate' AND '$lastdate'";
                     $sqlgroup = "SELECT * FROM Groups WHERE Date BETWEEN '$firstdate' AND '$lastdate'";
-                    // if ($search == "") {
-                    //     $sql = "SELECT * FROM News WHERE Date BETWEEN '$firstdate' AND '$lastdate'";
-                    // }
-                    // else {
-                    //     $sql = "SELECT * FROM News WHERE (Date BETWEEN '$firstdate' AND '$lastdate') AND (Location LIKE '%$search%' OR Title LIKE '%$search%' OR Article LIKE '%$search%')";
-                    // }
                 }
                 if($search == "") {
                     $grouplist = $conn->query($sqlgroup);
@@ -140,12 +134,6 @@
                         echo "<tr><td>" . $news["Date"] . "</td><td>" . $news["Location"] . "</td><td>" . number_format($news["Tone"]*100, 2) . "%" . "</td><td>" . $news["Killed"] . "</td><td>" . $news["Injured"] . "</td><td>" . $news["Title"] . "</td><td>" . $news["Article"] . "</td><td><a href=\"" . $news["Link"] . "\">Ссылка</a></td></tr>";
                     }
                 }
-                // $result = $conn->query($sql);
-                // if ($result->num_rows > 0) {
-                //     while($row = $result->fetch_assoc()) {
-                //         echo "<tr><td>" . $row["Date"] . "</td><td>" . $row["Location"] . "</td><td>" . number_format($row["Tone"]*100, 2) . "%" . "</td><td>" . $row["Title"] . "</td><td>" . $row["Article"] . "</td><td><a href=\"" . $row["Link"] . "\">Ссылка</a></td></tr>";
-                //     }
-                // }
                 $conn->close();
                 ?>
             </table>
