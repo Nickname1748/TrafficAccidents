@@ -21,6 +21,8 @@ def format_news_count(n):
         return "{} новостей".format(n)
 
 def format_victims_count(dead, injured):
+    deadtext = ''
+    injtext = ''
     if dead > 0:
         deadtext = 'Погибших: '+dead
     if injured > 0:
