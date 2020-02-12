@@ -38,7 +38,6 @@ def int_check(str):
     except ValueError:
         return False
 
-
 def number_of_victims(post):
     dead = 0
     injured = 0
@@ -48,17 +47,10 @@ def number_of_victims(post):
     injured = check(post, TfidfVectorizer(), pymorphy2.MorphAnalyzer(), ['пострадать', 'получить'], ['пострадал', 'пострадала'])
 
     return dead, injured
-
-    
-# def clear(word):
-#     return word.replace(',', '').replace('.', '')
-
         
 def check(post, vectorizer, morph, key_words, unique_words):
     post = re.sub(r'[^\w\s]', '', post, re.UNICODE)
     words = post.split(' ')
-
-    # quantity = []
 
     for i, word in enumerate(words):
         analyzedword = morph.parse(word)
@@ -66,20 +58,11 @@ def check(post, vectorizer, morph, key_words, unique_words):
         for key_word in key_words:
             if normword == key_word:
                 for n in range(-2, 3):
-                    # if (word == unique_words[0]) or (word == unique_words[0]):
-                    #     if '1' not in quantity:
-                    #         return '1'
-
                     if analyzedword[0].tag.POS == 'VERB':
                         if analyzedword[0].tag.number == 'sing':
                             if analyzedword[0].tag.gender != 'neut':
                                 return 1
 
-                    # if (morph.parse(key_word)[0].tag.gender == 'masc') or (morph.parse(key_word)[0].tag.gender == 'femn'):
-                    #     if '1' not in quantity:
-                    #         return '1'
-
-                    # if ((i + n) > 0) and ((i + n) < len(words)):
                     if i + n in range(len(words)):
                         ww = words[i + n]
                         if (morph.parse(ww)[0].tag.POS == 'NUMR') or ('NUMB' in morph.parse(ww)[0].tag):
@@ -93,5 +76,3 @@ def add_info(all_news):
     for i, news in enumerate(all_news):
         all_news[i]['dead'], all_news[i]['injured'] = number_of_victims(news['title']+' '+news['article'])
     return all_news
-
-#print(number_of_victims('Причиной ДТП с двумя погибшими в Туве мог стать снегопад Авария произошла в Улуг-Хемском районе на трассе «Енисей». Там лоб в лоб столкнулись две легковые машины.'))
