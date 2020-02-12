@@ -13,7 +13,7 @@ def putindb(all_news):
 	date = datetime.date.today()
 	idgroup = int(date.strftime('%Y%m%d')+'01')
 	idnews = int(date.strftime('%Y%m%d')+'001')
-	sqlnews = 'INSERT INTO News (ID, Date, Title, Article, Link, Location, Tone, GroupID) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
+	sqlnews = 'INSERT INTO News (ID, Date, Title, Article, Link, Location, Tone, Killed, Injured, GroupID) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
 	sqlgroups = 'INSERT INTO Groups (ID, Date, Title) VALUES (%s, %s, %s)'
 	for news in all_news:
 		if type(news) == list:
