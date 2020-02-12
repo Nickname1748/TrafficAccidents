@@ -20,12 +20,12 @@ def putindb(all_news):
 			valsgroup = (idgroup, date, news[0]['title'])
 			cursor.execute(sqlgroups, valsgroup)
 			for item in news:
-				valsitem = (idnews, date, item['title'], item['article'], item['link'], item['place'], item['tone']['negative'], idgroup)
+				valsitem = (idnews, date, item['title'], item['article'], item['link'], item['place'], float(item['tone']['negative']), idgroup)
 				cursor.execute(sqlnews, valsitem)
 				idnews += 1
 			idgroup += 1
 		else:
-			vals = (idnews, date, news['title'], news['article'], news['link'], news['place'], news['tone']['negative'], -1)
+			vals = (idnews, date, news['title'], news['article'], news['link'], news['place'], float(news['tone']['negative']), -1)
 			cursor.execute(sqlnews, vals)
 			idnews += 1
 	
