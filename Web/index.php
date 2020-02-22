@@ -123,7 +123,7 @@
                         while($news = $newslist->fetch_assoc()) {
                             echo "<tr><td>" . $news["Date"] . "</td><td>" . $news["Location"] . "</td><td>" . number_format($news["Tone"]*100, 2) . "%"
                                 . "</td><td>" . $news["Killed"] . "</td><td>" . $news["Injured"] . "</td><td>" . $news["Title"] . "</td><td>"
-                                . $news["Article"] . "</td><td><a href=\"" . $news["Link"] . "\">Ссылка</a></td></tr>";
+                                . $news["Article"] . "</td><td><a href=\"" . $news["Link"] . "\" target=\"_blank\">Ссылка</a></td></tr>";
                         }
                     }
                     elseif ($sortby == "victimsquantity") { # Sort by victims
@@ -133,7 +133,7 @@
                             if ($news["GroupID"] == -1) { # Doesn't belong to any group
                                 echo "<tr><td>" . $news["Date"] . "</td><td>" . $news["Location"] . "</td><td>" . number_format($news["Tone"]*100, 2) . "%"
                                     . "</td><td>" . $news["Killed"] . "</td><td>" . $news["Injured"] . "</td><td>" . $news["Title"] . "</td><td>"
-                                    . $news["Article"] . "</td><td><a href=\"" . $news["Link"] . "\">Ссылка</a></td></tr>";
+                                    . $news["Article"] . "</td><td><a href=\"" . $news["Link"] . "\" target=\"_blank\">Ссылка</a></td></tr>";
                             }
                             elseif (! in_array($news["GroupID"], $idsused)) { # Belongs to groups which wasn't used before
                                 array_push($idsused, $news["GroupID"]);
@@ -144,7 +144,7 @@
                                     while($news = $newslist->fetch_assoc()) {
                                         echo "<tr class=\"groupitem\"><td>" . $news["Date"] . "</td><td>" . $news["Location"] . "</td><td>"
                                             . number_format($news["Tone"]*100, 2) . "%" . "</td><td>" . $news["Killed"] . "</td><td>" . $news["Injured"]
-                                            . "</td><td>" . $news["Title"] . "</td><td>" . $news["Article"] . "</td><td><a href=\"" . $news["Link"] . "\">Ссылка</a></td></tr>";
+                                            . "</td><td>" . $news["Title"] . "</td><td>" . $news["Article"] . "</td><td><a href=\"" . $news["Link"] . "\" target=\"_blank\">Ссылка</a></td></tr>";
                                     }
                                 }
                             }
@@ -158,7 +158,7 @@
                             while($news = $newslist->fetch_assoc()) {
                                 echo "<tr class=\"groupitem\"><td>" . $news["Date"] . "</td><td>" . $news["Location"] . "</td><td>"
                                     . number_format($news["Tone"]*100, 2) . "%" . "</td><td>" . $news["Killed"] . "</td><td>" . $news["Injured"]
-                                    . "</td><td>" . $news["Title"] . "</td><td>" . $news["Article"] . "</td><td><a href=\"" . $news["Link"] . "\">Ссылка</a></td></tr>";
+                                    . "</td><td>" . $news["Title"] . "</td><td>" . $news["Article"] . "</td><td><a href=\"" . $news["Link"] . "\" target=\"_blank\">Ссылка</a></td></tr>";
                             }
                         }
                         # echo "<tr><th colspan=8 class=\"newsgroup\">Не сгруппировано</th></tr>";
@@ -166,7 +166,7 @@
                         while($news = $newslist->fetch_assoc()) {
                             echo "<tr><td>" . $news["Date"] . "</td><td>" . $news["Location"] . "</td><td>" . number_format($news["Tone"]*100, 2) . "%"
                                 . "</td><td>" . $news["Killed"] . "</td><td>" . $news["Injured"] . "</td><td>" . $news["Title"] . "</td><td>"
-                                . $news["Article"] . "</td><td><a href=\"" . $news["Link"] . "\">Ссылка</a></td></tr>";
+                                . $news["Article"] . "</td><td><a href=\"" . $news["Link"] . "\" target=\"_blank\">Ссылка</a></td></tr>";
                         }
                     }
                 }
@@ -176,7 +176,7 @@
                         while($news = $newslist->fetch_assoc()) {
                             echo "<tr><td>" . $news["Date"] . "</td><td>" . $news["Location"] . "</td><td>" . number_format($news["Tone"]*100, 2) . "%"
                                 . "</td><td>" . $news["Killed"] . "</td><td>" . $news["Injured"] . "</td><td>" . $news["Title"] . "</td><td>"
-                                . $news["Article"] . "</td><td><a href=\"" . $news["Link"] . "\">Ссылка</a></td></tr>";
+                                . $news["Article"] . "</td><td><a href=\"" . $news["Link"] . "\" target=\"_blank\">Ссылка</a></td></tr>";
                         }
                     }
                     elseif ($sortby == "victimsquantity") { # Sort by victims
@@ -186,7 +186,7 @@
                             if ($news["GroupID"] == -1) { # Doesn't belong to any group
                                 echo "<tr><td>" . $news["Date"] . "</td><td>" . $news["Location"] . "</td><td>" . number_format($news["Tone"]*100, 2) . "%"
                                     . "</td><td>" . $news["Killed"] . "</td><td>" . $news["Injured"] . "</td><td>" . $news["Title"] . "</td><td>"
-                                    . $news["Article"] . "</td><td><a href=\"" . $news["Link"] . "\">Ссылка</a></td></tr>";
+                                    . $news["Article"] . "</td><td><a href=\"" . $news["Link"] . "\" target=\"_blank\">Ссылка</a></td></tr>";
                             }
                             elseif (! in_array($news["GroupID"], $idsused)) { # Belongs to groups which wasn't used before
                                 array_push($idsused, $news["GroupID"]);
@@ -197,7 +197,7 @@
                                     while($news = $newslist->fetch_assoc()) {
                                         echo "<tr class=\"groupitem\"><td>" . $news["Date"] . "</td><td>" . $news["Location"] . "</td><td>"
                                             . number_format($news["Tone"]*100, 2) . "%" . "</td><td>" . $news["Killed"] . "</td><td>" . $news["Injured"]
-                                            . "</td><td>" . $news["Title"] . "</td><td>" . $news["Article"] . "</td><td><a href=\"" . $news["Link"] . "\">Ссылка</a></td></tr>";
+                                            . "</td><td>" . $news["Title"] . "</td><td>" . $news["Article"] . "</td><td><a href=\"" . $news["Link"] . "\" target=\"_blank\">Ссылка</a></td></tr>";
                                     }
                                 }
                             }
@@ -213,7 +213,7 @@
                                 while($news = $newslist->fetch_assoc()) {
                                     echo "<tr class=\"groupitem\"><td>" . $news["Date"] . "</td><td>" . $news["Location"] . "</td><td>"
                                         . number_format($news["Tone"]*100, 2) . "%" . "</td><td>" . $news["Killed"] . "</td><td>" . $news["Injured"]
-                                        . "</td><td>" . $news["Title"] . "</td><td>" . $news["Article"] . "</td><td><a href=\"" . $news["Link"] . "\">Ссылка</a></td></tr>";
+                                        . "</td><td>" . $news["Title"] . "</td><td>" . $news["Article"] . "</td><td><a href=\"" . $news["Link"] . "\" target=\"_blank\">Ссылка</a></td></tr>";
                                 }
                             }
                         }
@@ -222,7 +222,7 @@
                         while($news = $newslist->fetch_assoc()) { # Get the rest of news
                             echo "<tr><td>" . $news["Date"] . "</td><td>" . $news["Location"] . "</td><td>" . number_format($news["Tone"]*100, 2) . "%"
                                 . "</td><td>" . $news["Killed"] . "</td><td>" . $news["Injured"] . "</td><td>" . $news["Title"] . "</td><td>"
-                                . $news["Article"] . "</td><td><a href=\"" . $news["Link"] . "\">Ссылка</a></td></tr>";
+                                . $news["Article"] . "</td><td><a href=\"" . $news["Link"] . "\" target=\"_blank\">Ссылка</a></td></tr>";
                         }
                     }
                 }
