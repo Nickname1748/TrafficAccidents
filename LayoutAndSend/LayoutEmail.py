@@ -40,6 +40,7 @@ def layout_text_part(all_news):
     return text
 
 def layout_html_part(all_news):
+    all_news = all_news[:15] # Show only 15 news, rest news at site
     template = open('html/emailtemplate.html', 'r').read()
     newsgrouptemplate = open('html/emailnewsgrouptemplate.html', 'r').read()
     newsgroupitemtemplate = open('html/emailnewsgroupitemtemplate.html', 'r').read()
