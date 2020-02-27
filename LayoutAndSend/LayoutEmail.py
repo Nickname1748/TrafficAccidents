@@ -40,6 +40,7 @@ def layout_text_part(all_news):
     return text
 
 def layout_html_part(all_news):
+    news_count = len(all_news)
     all_news = all_news[:15] # Show only 15 news, rest news at site
     template = open('html/emailtemplate.html', 'r').read()
     newsgrouptemplate = open('html/emailnewsgrouptemplate.html', 'r').read()
@@ -56,7 +57,7 @@ def layout_html_part(all_news):
         else:
             newsitems.append(newsitemtemplate.format(news['place'], news['tone']['negative'], format_victims_count(news['dead'], news['injured']), news['title'], news['link'], news['article']))
     groups.extend(newsitems)
-    html = template.format(get_localized_time(), format_news_count(len(all_news)), '\n'.join(groups))
+    html = template.format(get_localized_time(), format_news_count(news_count), '\n'.join(groups))
     return html
 
 def layout(all_news):
