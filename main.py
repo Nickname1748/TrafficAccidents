@@ -23,12 +23,12 @@ all_news = info.add_info(all_news)
 all_news = location.location_filter(all_news)
 all_news = tone.analyze(all_news)
 all_news = duplicate_filter.main_filter(all_news)
-if "--nosend" not in args and "--db" not in args:
+if "--nosend" not in args:
     msg = layout.layout(all_news)
     send.send(msg)
-elif "--db" in args:
+if "--db" in args:
     db.putindb(all_news)
-else:
+if "--nosend" in args:
     if '--html' not in args:
         output = layout.layout_text_part(all_news)
     else:
