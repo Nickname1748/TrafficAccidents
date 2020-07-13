@@ -6,7 +6,7 @@ import time
 def parse(word):
     all_news = []
     url = httplib2.iri2uri('https://smi2.ru/api/search?limit=100&offset=0&order=date&query={}'.format(word))
-    while True:
+    for q in range(5):
         try:
             jsonurl = urllib.request.urlopen(url)
         except urllib.error.HTTPError as error:
